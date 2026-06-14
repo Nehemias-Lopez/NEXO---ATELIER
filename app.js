@@ -1,4 +1,4 @@
-const storageKey = 'nexo-atelier-m02-state';
+const storageKey = 'nexo-atelier-m03-state';
 
 const defaultAgents = [
   { role: 'Estratega', mission: 'Convierte una idea ambigua en objetivo, alcance y prioridades.', status: 'Listo' },
@@ -10,9 +10,9 @@ const defaultAgents = [
 
 const builderBlocks = [
   { title: 'Idea', text: 'Texto inicial capturado desde el teléfono.' },
-  { title: 'Plan M0.2', text: 'Resumen, objetivo, MVP, tareas, riesgos y roadmap de 7 días.' },
+  { title: 'Plan M0.3', text: 'Plan, recursos accionables y guía de ejecución desde móvil.' },
   { title: 'Persistencia', text: 'Estado guardado en localStorage sin backend ni API keys.' },
-  { title: 'Export', text: 'Copia o descarga el plan como texto para compartirlo.' },
+  { title: 'Execution Pack', text: 'Brief, prompt, checklist y mensaje de feedback listos para copiar.' },
   { title: 'Deploy', text: 'Publica el sitio desde el repositorio ATELIER con GitHub Pages.' }
 ];
 
@@ -147,6 +147,22 @@ function summarizeIdea(idea) {
   return `${cleanIdea.slice(0, 147)}...`;
 }
 
+
+function createExecutionPack(idea, template) {
+  return {
+    brief: `Proyecto: ${idea}\nUsuario objetivo: ${template.targetUser}\nResultado esperado: ${template.objective}\nMVP: ${template.mvp}`,
+    validationChecklist: [
+      '¿El usuario objetivo entiende la propuesta en menos de 10 segundos?',
+      '¿El MVP resuelve un problema real y frecuente?',
+      '¿Existe una forma simple de medir interés hoy?',
+      '¿La primera versión puede completarse desde un teléfono?',
+      '¿La próxima acción produce evidencia, venta, feedback o aprendizaje?'
+    ],
+    buildPrompt: `Actúa como constructor mobile-first. Crea una primera versión simple para: ${idea}. Debe enfocarse en ${template.targetUser}, incluir solo el flujo principal, evitar dependencias complejas y producir un resultado usable en navegador.`,
+    feedbackMessage: `Estoy validando esta idea: ${idea}. ¿Qué parte te resulta más útil, qué no entiendes y qué tendría que cambiar para que la usaras o pagaras por ella?`
+  };
+}
+
 function makePlan(idea) {
   const cleanIdea = normalizeIdea(idea);
   const template = getTemplate(cleanIdea);
@@ -168,7 +184,9 @@ function makePlan(idea) {
     tools: template.tools,
     risks: template.risks,
     nextAction: `Hoy: ${template.roadmap[0].toLowerCase()} y completar la primera tarea del checklist.`,
-    roadmap: template.roadmap.map((item, index) => ({ day: index + 1, item }))
+    roadmap: template.roadmap.map((item, index) => ({ day: index + 1, item })),
+    executionPack: createExecutionPack(cleanIdea, template),
+    flow: ['IDEA', 'ENTENDER', 'PLANIFICAR', 'CONSTRUIR', 'EJECUTAR', 'MEJORAR']
   };
 }
 
@@ -200,6 +218,17 @@ function renderLastSaved() {
 
 function renderValidation(message = '') {
   byId('ideaMessage').textContent = message;
+}
+
+
+function renderResource(title, content) {
+  return `
+    <div class="resource-card">
+      <h4>${escapeHtml(title)}</h4>
+      <p>${escapeHtml(content).replace(/\n/g, '<br />')}</p>
+      <button class="mini-button" type="button" data-copy-resource="${encodeURIComponent(content)}">Copiar</button>
+    </div>
+  `;
 }
 
 function renderPlan() {
@@ -253,10 +282,26 @@ function renderPlan() {
       <p class="eyebrow">Roadmap de 7 días</p>
       <ol>${state.plan.roadmap.map((step) => `<li><strong>Día ${step.day}:</strong> ${escapeHtml(step.item)}</li>`).join('')}</ol>
     </article>
+    <article class="info-card">
+      <p class="eyebrow">Flujo NEXO</p>
+      <div class="flow-steps">${state.plan.flow.map((step) => `<span>${escapeHtml(step)}</span>`).join('')}</div>
+    </article>
+    <article class="info-card">
+      <p class="eyebrow">Execution Pack</p>
+      <div class="resource-stack">
+        ${renderResource('Brief del proyecto', state.plan.executionPack.brief)}
+        ${renderResource('Checklist de validación', state.plan.executionPack.validationChecklist.map((item) => `• ${item}`).join('\n'))}
+        ${renderResource('Prompt de construcción', state.plan.executionPack.buildPrompt)}
+        ${renderResource('Mensaje para pedir feedback', state.plan.executionPack.feedbackMessage)}
+      </div>
+    </article>
   `;
 
   output.querySelectorAll('[data-task-index]').forEach((checkbox) => {
     checkbox.addEventListener('change', handleTaskToggle);
+  });
+  output.querySelectorAll('[data-copy-resource]').forEach((button) => {
+    button.addEventListener('click', () => copyText(decodeURIComponent(button.dataset.copyResource), 'Recurso copiado.'));
   });
 }
 
@@ -326,7 +371,7 @@ function handleTaskToggle(event) {
 function planAsText() {
   if (!state.plan) return '';
   const lines = [
-    'NEXO M0.2 — Plan local',
+    'NEXO M0.3 — Execution Plan',
     '',
     `Idea: ${state.lastIdea}`,
     `Resumen: ${state.plan.summary}`,
@@ -346,9 +391,29 @@ function planAsText() {
     `Próxima acción: ${state.plan.nextAction}`,
     '',
     'Roadmap de 7 días:',
-    ...state.plan.roadmap.map((step) => `Día ${step.day}: ${step.item}`)
+    ...state.plan.roadmap.map((step) => `Día ${step.day}: ${step.item}`),
+    '',
+    'Execution Pack:',
+    `Brief: ${state.plan.executionPack.brief}`,
+    '',
+    'Checklist de validación:',
+    ...state.plan.executionPack.validationChecklist.map((item) => `- ${item}`),
+    '',
+    `Prompt de construcción: ${state.plan.executionPack.buildPrompt}`,
+    '',
+    `Mensaje de feedback: ${state.plan.executionPack.feedbackMessage}`
   ];
   return lines.join('\n');
+}
+
+
+async function copyText(text, successMessage) {
+  try {
+    await navigator.clipboard.writeText(text);
+    renderValidation(successMessage);
+  } catch {
+    renderValidation('No se pudo copiar automáticamente. Selecciona y copia el texto manualmente.');
+  }
 }
 
 async function copyPlan() {
@@ -358,12 +423,7 @@ async function copyPlan() {
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(text);
-    renderValidation('Plan copiado al portapapeles.');
-  } catch {
-    renderValidation('No se pudo copiar automáticamente. Selecciona y copia el plan manualmente.');
-  }
+  await copyText(text, 'Plan copiado al portapapeles.');
 }
 
 function downloadPlan() {
@@ -377,7 +437,7 @@ function downloadPlan() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'nexo-m02-plan.txt';
+  link.download = 'nexo-m03-execution-plan.txt';
   link.click();
   URL.revokeObjectURL(url);
   renderValidation('Plan descargado como .txt.');

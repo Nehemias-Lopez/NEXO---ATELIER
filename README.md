@@ -1,18 +1,28 @@
 # NEXO---ATELIER
 
-## NEXO M0.2 — Functional Local Planner
+## NEXO M0.3 — Mobile Execution Builder
 
-NEXO M0.2 is a mobile-first static planning tool for GitHub Pages. It works with pure HTML, CSS, and JavaScript: no backend, no API keys, no frameworks, and no external dependencies.
+NEXO M0.3 turns the static planner into a more useful local execution tool. It still works with pure HTML, CSS, and JavaScript on GitHub Pages: no backend, no API keys, no frameworks, and no external dependencies.
 
-### What M0.2 does
+### Product direction
+
+NEXO is not a chatbot. NEXO is a creation operating system that helps a user move through:
+
+`IDEA → ENTENDER → PLANIFICAR → CONSTRUIR → EJECUTAR → MEJORAR`
+
+M0.3 keeps that flow lightweight and local so someone can start from a phone and leave with a plan plus resources they can act on immediately.
+
+### What M0.3 does
 
 - Captures an idea from the mobile textarea.
 - Generates a local structured project plan using JavaScript keyword templates.
 - Shows summary, main objective, target user, suggested MVP, 5 concrete tasks, tools, risks, next action, and a 7-day mini roadmap.
+- Adds an Execution Pack with a project brief, validation checklist, construction prompt, and feedback message.
 - Lets users check completed tasks and updates the completed counter live.
-- Saves the last idea, generated plan, task completion state, counters, and last updated timestamp in `localStorage`.
+- Saves the last idea, generated plan, task completion state, counters, execution resources, and last updated timestamp in `localStorage`.
 - Restores the last saved plan after refresh.
-- Exports the plan by copying it to the clipboard or downloading a `.txt` file.
+- Exports the full plan by copying it to the clipboard or downloading a `.txt` file.
+- Lets users copy individual execution resources.
 - Resets all local project data from the app.
 
 ### Supported local templates
