@@ -42,7 +42,12 @@
             <strong id="toolsCount">0</strong>
             <span>herramientas</span>
           </article>
+          <article>
+            <strong id="completedCount">0</strong>
+            <span>completadas</span>
+          </article>
         </section>
+        <p class="save-indicator" id="lastSaved">Sin guardar todavía</p>
       </header>
 
       <main>
@@ -52,11 +57,16 @@
             <h2>Describe lo que quieres construir</h2>
           </div>
           <label for="ideaInput">Idea inicial</label>
-          <textarea id="ideaInput" rows="6" placeholder="Ejemplo: una app para organizar ventas de comida desde mi teléfono."></textarea>
+          <textarea id="ideaInput" rows="6" placeholder="Ejemplo: Quiero vender plantillas digitales desde mi teléfono"></textarea>
+          <p class="form-message" id="ideaMessage" aria-live="polite"></p>
           <div class="form-row">
             <button class="button primary" id="captureIdea" type="button">Capturar idea</button>
             <button class="button secondary" id="generatePlan" type="button">Generar plan</button>
-            <button class="button subtle" id="clearData" type="button">Reset</button>
+            <button class="button subtle" id="clearData" type="button">Reset project</button>
+          </div>
+          <div class="form-row export-row">
+            <button class="button secondary" id="copyPlan" type="button">Copiar plan</button>
+            <button class="button secondary" id="downloadPlan" type="button">Descargar .txt</button>
           </div>
         </section>
 
@@ -65,7 +75,7 @@
             <p class="eyebrow">Project Planner</p>
             <h2>Plan estructurado</h2>
           </div>
-          <div id="planOutput" class="empty-state">Captura una idea para generar resumen, objetivo, MVP, 5 tareas, herramientas y próxima acción.</div>
+          <div id="planOutput" class="empty-state">Captura una idea para generar resumen, objetivo, usuario, MVP, tareas, herramientas, riesgos y roadmap de 7 días.</div>
         </section>
 
         <section class="panel" id="agents">

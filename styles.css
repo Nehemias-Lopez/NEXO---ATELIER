@@ -96,9 +96,9 @@ h3 { margin-bottom: 8px; }
 .secondary { background: rgba(255, 255, 255, 0.1); }
 .subtle { color: var(--danger); background: rgba(255, 107, 122, 0.12); }
 
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
 .stats-grid article { border-radius: 18px; padding: 14px; }
-.stats-grid strong { display: block; font-size: 1.55rem; }
+.stats-grid strong { display: block; font-size: clamp(1.15rem, 6vw, 1.55rem); }
 .stats-grid span { color: var(--muted); font-size: 0.82rem; }
 
 main { display: grid; gap: 16px; }
@@ -117,6 +117,9 @@ textarea {
 }
 textarea:focus { border-color: rgba(32, 224, 178, 0.72); box-shadow: 0 0 0 4px rgba(32, 224, 178, 0.08); }
 .form-row { flex-wrap: wrap; margin-top: 12px; }
+.export-row { margin-top: 8px; }
+.form-message, .save-indicator { min-height: 20px; margin: 10px 0 0; color: var(--brand-2); font-size: 0.86rem; font-weight: 800; }
+.save-indicator { color: var(--muted); text-align: right; }
 
 .empty-state, .info-card {
   border: 1px solid var(--line);
@@ -128,6 +131,30 @@ textarea:focus { border-color: rgba(32, 224, 178, 0.72); box-shadow: 0 0 0 4px r
 .plan-stack, .agent-list, .builder-grid { display: grid; gap: 10px; }
 ul, ol { padding-left: 20px; margin-bottom: 0; color: var(--muted); line-height: 1.7; }
 
+
+.task-list {
+  display: grid;
+  gap: 10px;
+}
+.task-item {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.task-item input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--brand-2);
+}
+.task-item input:checked + span {
+  color: rgba(248, 251, 255, 0.62);
+  text-decoration: line-through;
+}
 .tool-tags {
   display: flex;
   flex-wrap: wrap;
