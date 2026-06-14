@@ -1,4 +1,3 @@
-# NEXO---ATELIER
 
 ## NEXO M0.3 — Mobile Execution Builder
 
