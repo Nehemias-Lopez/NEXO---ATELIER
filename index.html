@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="description" content="NEXO Mobile Control Center: captura ideas, genera planes y organiza herramientas desde el navegador." />
+    <title>NEXO Mobile Control Center</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero" id="dashboard">
+        <nav class="topbar" aria-label="Navegación principal">
+          <a class="brand" href="#dashboard" aria-label="NEXO inicio">
+            <span class="brand-mark">N</span>
+            <span>NEXO</span>
+          </a>
+          <a class="ghost-link" href="#tools">Herramientas</a>
+        </nav>
+
+        <section class="hero-card">
+          <p class="eyebrow">Mobile Control Center</p>
+          <h1>Convierte ideas en planes, tareas y herramientas compartibles.</h1>
+          <p class="hero-copy">Una primera versión funcional, ligera y sin dependencias para construir proyectos desde cualquier teléfono.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#capture">Capturar idea</a>
+            <a class="button secondary" href="#planner">Ver plan</a>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Resumen del proyecto">
+          <article>
+            <strong id="ideasCount">0</strong>
+            <span>ideas</span>
+          </article>
+          <article>
+            <strong id="tasksCount">0</strong>
+            <span>tareas</span>
+          </article>
+          <article>
+            <strong id="toolsCount">0</strong>
+            <span>herramientas</span>
+          </article>
+        </section>
+      </header>
+
+      <main>
+        <section class="panel" id="capture">
+          <div class="section-heading">
+            <p class="eyebrow">Idea Capture</p>
+            <h2>Describe lo que quieres crear</h2>
+          </div>
+          <label for="ideaInput">Tu idea</label>
+          <textarea id="ideaInput" rows="6" placeholder="Ejemplo: quiero crear una tienda simple para vender plantillas digitales desde mi teléfono."></textarea>
+          <div class="form-row">
+            <button class="button primary" id="generatePlan" type="button">Generar plan</button>
+            <button class="button subtle" id="clearData" type="button">Reiniciar</button>
+          </div>
+        </section>
+
+        <section class="panel" id="planner">
+          <div class="section-heading">
+            <p class="eyebrow">Project Planner</p>
+            <h2>Plan estructurado</h2>
+          </div>
+          <div id="planOutput" class="empty-state">Captura una idea para crear objetivos, fases y tareas accionables.</div>
+        </section>
+
+        <section class="panel" id="builder">
+          <div class="section-heading">
+            <p class="eyebrow">Builder</p>
+            <h2>Bloques para construir</h2>
+          </div>
+          <div class="builder-grid" id="builderBlocks"></div>
+        </section>
+
+        <section class="panel" id="tools">
+          <div class="section-heading">
+            <p class="eyebrow">Herramientas</p>
+            <h2>Guarda, comparte o vende recursos</h2>
+          </div>
+          <form class="tool-form" id="toolForm">
+            <input id="toolName" type="text" placeholder="Nombre de la herramienta" autocomplete="off" required />
+            <input id="toolPrice" type="text" placeholder="Gratis o precio" autocomplete="off" />
+            <button class="button primary" type="submit">Añadir</button>
+          </form>
+          <div class="tool-list" id="toolList"></div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Navegación móvil">
+      <a href="#dashboard">Inicio</a>
+      <a href="#capture">Idea</a>
+      <a href="#planner">Plan</a>
+      <a href="#builder">Builder</a>
+      <a href="#tools">Tools</a>
+    </nav>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
