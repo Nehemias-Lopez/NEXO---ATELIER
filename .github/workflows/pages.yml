@@ -1,14 +1,10 @@
-name: Deploy static site to GitHub Pages
+name: Deploy GitHub Pages
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -27,16 +23,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare static site
+      - name: Validate static files
         run: |
           test -f index.html
           test -f styles.css
           test -f app.js
           test -f .nojekyll
-          mkdir -p _site
-          cp index.html styles.css app.js .nojekyll _site/
+          test -f README.md
 
-      - name: Upload static site artifact
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _site
+          cp index.html styles.css app.js .nojekyll README.md _site/
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
@@ -44,14 +45,11 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

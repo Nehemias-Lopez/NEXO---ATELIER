@@ -1,302 +1,163 @@
-const screens = [...document.querySelectorAll(".screen")];
-const navItems = [...document.querySelectorAll("[data-go]")];
-const ideaInput = document.querySelector("#ideaInput");
-const generatePlanButton = document.querySelector("#generatePlanButton");
-const resetButton = document.querySelector("#resetButton");
-const projectStatus = document.querySelector("#projectStatus");
-const projectSummary = document.querySelector("#projectSummary");
-const planGoal = document.querySelector("#planGoal");
-const planDescription = document.querySelector("#planDescription");
-const taskList = document.querySelector("#taskList");
-const taskCount = document.querySelector("#taskCount");
-const previewTitle = document.querySelector("#previewTitle");
-const previewCopy = document.querySelector("#previewCopy");
-const agentList = document.querySelector("#agentList");
-const toolNameInput = document.querySelector("#toolNameInput");
-const toolPriceInput = document.querySelector("#toolPriceInput");
-const addToolButton = document.querySelector("#addToolButton");
+const storageKey = 'nexo-pages-clean-state';
 
-const templates = {
-  landing: "Quiero crear una landing page moderna para validar una idea de negocio y recibir contactos por WhatsApp.",
-  negocio: "Quiero estructurar un plan de negocio simple para un emprendimiento local con bajo presupuesto.",
-  automatizacion: "Quiero automatizar tareas repetitivas de atención al cliente para ahorrar tiempo cada semana.",
-  app: "Quiero crear una app simple para organizar usuarios, tareas y recordatorios desde el navegador."
-};
-
-const defaultTools = [
-  {
-    name: "Estratega de Ideas",
-    role: "Gratis",
-    description: "Convierte ideas desordenadas en objetivos, alcance y prioridades.",
-    price: 0
-  },
-  {
-    name: "Arquitecto de Proyecto",
-    role: "Gratis",
-    description: "Define módulos, datos, integraciones y límites técnicos para una solución.",
-    price: 0
-  },
-  {
-    name: "Diseñador Mobile",
-    role: "Pro",
-    description: "Propone pantallas, bloques y experiencia mobile-first lista para presentar.",
-    price: 9
-  },
-  {
-    name: "Constructor de Landing",
-    role: "Gratis",
-    description: "Transforma un plan en una estructura inicial de página, secciones y CTA.",
-    price: 0
-  },
-  {
-    name: "Revisor QA",
-    role: "Pro",
-    description: "Revisa claridad, errores, riesgos y pasos incompletos antes de compartir.",
-    price: 5
-  },
-  {
-    name: "Analizador de Prioridades",
-    role: "Gratis",
-    description: "Resume progreso, costos, riesgos y próximas decisiones del proyecto.",
-    price: 0
-  }
+const starterTools = [
+  { name: 'Generador de roadmap', price: 'Gratis', description: 'Convierte metas en fases, tareas y prioridades.' },
+  { name: 'Checklist de lanzamiento', price: '$5', description: 'Lista compacta para publicar una versión inicial sin olvidar pasos críticos.' },
+  { name: 'Validador de idea', price: 'Gratis', description: 'Preguntas simples para confirmar problema, usuario y propuesta de valor.' }
 ];
 
-let project = loadProject();
-let tools = loadTools();
+const builderBlocks = [
+  { title: 'Captura', text: 'Recibe una idea en lenguaje natural desde móvil.' },
+  { title: 'Plan', text: 'Divide la idea en objetivo, fases y tareas.' },
+  { title: 'Herramienta', text: 'Guarda recursos que pueden ser privados, gratis o de pago.' },
+  { title: 'Publicación', text: 'Prepara el proyecto para compartirlo como página estática.' }
+];
 
-function setScreen(target) {
-  screens.forEach((screen) => {
-    screen.classList.toggle("active", screen.dataset.screen === target);
-  });
+let state = loadState();
 
-  document.querySelectorAll(".nav-item").forEach((item) => {
-    item.classList.toggle("active", item.dataset.go === target);
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    return saved || { ideas: [], tasks: [], tools: starterTools };
+  } catch {
+    return { ideas: [], tasks: [], tools: starterTools };
+  }
 }
 
-function normalizeIdea(value) {
-  return value.trim().replace(/\s+/g, " ");
+function saveState() {
+  localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
-function detectProjectType(idea) {
-  const text = idea.toLowerCase();
-
-  if (text.includes("landing") || text.includes("página") || text.includes("pagina") || text.includes("web")) {
-    return "landing page";
-  }
-
-  if (text.includes("automat")) {
-    return "automatización";
-  }
-
-  if (text.includes("app") || text.includes("aplicación") || text.includes("aplicacion")) {
-    return "aplicación web";
-  }
-
-  if (text.includes("negocio") || text.includes("emprend")) {
-    return "plan de negocio";
-  }
-
-  return "proyecto digital";
+function byId(id) {
+  return document.getElementById(id);
 }
 
-function createPlan(idea) {
-  const cleanIdea = normalizeIdea(idea);
-  const type = detectProjectType(cleanIdea);
-  const shortIdea = cleanIdea.length > 120 ? `${cleanIdea.slice(0, 120)}...` : cleanIdea;
+function makePlan(idea) {
+  const cleanIdea = idea.trim();
+  const tasks = [
+    `Definir el usuario principal para: ${cleanIdea}`,
+    'Escribir una propuesta de valor en una frase.',
+    'Crear una lista de funcionalidades mínimas.',
+    'Diseñar una pantalla mobile-first para el flujo principal.',
+    'Publicar una primera versión navegable y pedir feedback.'
+  ];
 
   return {
-    idea: cleanIdea,
-    type,
-    goal: `Crear un primer ${type} útil y compartible desde móvil`,
-    description: `NEXO organizará la idea: “${shortIdea}” en un entregable simple, validable y de bajo consumo.`,
-    tasks: [
-      "Definir usuario objetivo y problema principal.",
-      "Escribir una propuesta de valor en una frase clara.",
-      "Crear estructura inicial con secciones, beneficios y llamada a la acción.",
-      "Preparar una lista mínima de funciones o contenidos necesarios.",
-      "Revisar el resultado con QA y simplificar lo que no sea esencial.",
-      "Exportar o compartir el primer entregable para recibir feedback."
-    ],
-    updatedAt: new Date().toISOString()
+    objective: `Transformar “${cleanIdea}” en un proyecto validable desde navegador móvil.`,
+    phases: ['Clarificar', 'Construir MVP', 'Compartir', 'Mejorar'],
+    tasks
   };
 }
 
-function renderProject() {
-  if (!project) {
-    projectStatus.textContent = "Sin proyecto activo";
-    projectSummary.textContent = "Describe una idea para que NODO genere objetivos, tareas y próximos pasos.";
-    planGoal.textContent = "Aún no hay plan";
-    planDescription.textContent = "Captura una idea para generar el plan inicial.";
-    taskList.innerHTML = "";
-    taskCount.textContent = "0";
-    previewTitle.textContent = "Tu proyecto aparecerá aquí";
-    previewCopy.textContent = "Genera un plan para crear una primera landing o documento.";
+function renderPlan() {
+  const output = byId('planOutput');
+  if (!state.plan) {
+    output.className = 'empty-state';
+    output.textContent = 'Captura una idea para crear objetivos, fases y tareas accionables.';
     return;
   }
 
-  projectStatus.textContent = `Proyecto activo · ${project.type}`;
-  projectSummary.textContent = project.description;
-  planGoal.textContent = project.goal;
-  planDescription.textContent = project.description;
-  taskCount.textContent = project.tasks.length;
-  taskList.innerHTML = project.tasks
-    .map(
-      (task, index) => `
-        <li class="task-item">
-          <span class="task-index">${index + 1}</span>
-          <span>${task}</span>
-        </li>
-      `
-    )
-    .join("");
-  previewTitle.textContent = project.goal;
-  previewCopy.textContent = "Una primera versión clara, ligera y lista para compartir con usuarios reales.";
+  output.className = '';
+  output.innerHTML = `
+    <article class="plan-card">
+      <p class="eyebrow">Objetivo</p>
+      <h3>${escapeHtml(state.plan.objective)}</h3>
+    </article>
+    <article class="plan-card">
+      <p class="eyebrow">Fases</p>
+      <ul>${state.plan.phases.map((phase) => `<li>${escapeHtml(phase)}</li>`).join('')}</ul>
+    </article>
+    <article class="plan-card">
+      <p class="eyebrow">Tareas</p>
+      <ul>${state.plan.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('')}</ul>
+    </article>
+  `;
 }
 
 function renderTools() {
-  agentList.innerHTML = tools
-    .map(
-      (tool) => `
-        <article class="agent-card">
-          <div class="agent-avatar">${tool.name.charAt(0)}</div>
-          <div>
-            <span class="agent-role">${tool.role}</span>
-            <h3>${tool.name}</h3>
-            <p>${tool.description}</p>
-            <span class="tool-price">${tool.price > 0 ? `$${tool.price} USD` : "Gratis"}</span>
-          </div>
-        </article>
-      `
-    )
-    .join("");
+  byId('toolList').innerHTML = state.tools.map((tool) => `
+    <article class="tool-card">
+      <h3>${escapeHtml(tool.name)}</h3>
+      <p class="muted">${escapeHtml(tool.description || 'Herramienta guardada por el usuario para uso personal o publicación.')}</p>
+      <span class="price-pill">${escapeHtml(tool.price || 'Gratis')}</span>
+    </article>
+  `).join('');
 }
 
-function saveTools() {
-  localStorage.setItem("nexo-tools", JSON.stringify(tools));
+function renderBlocks() {
+  byId('builderBlocks').innerHTML = builderBlocks.map((block) => `
+    <article class="block-card">
+      <h3>${escapeHtml(block.title)}</h3>
+      <p class="muted">${escapeHtml(block.text)}</p>
+    </article>
+  `).join('');
 }
 
-function loadTools() {
-  const storedTools = localStorage.getItem("nexo-tools");
-
-  if (!storedTools) {
-    return defaultTools;
-  }
-
-  try {
-    const parsedTools = JSON.parse(storedTools);
-    return Array.isArray(parsedTools) && parsedTools.length ? parsedTools : defaultTools;
-  } catch {
-    localStorage.removeItem("nexo-tools");
-    return defaultTools;
-  }
+function renderStats() {
+  byId('ideasCount').textContent = state.ideas.length;
+  byId('tasksCount').textContent = state.tasks.length;
+  byId('toolsCount').textContent = state.tools.length;
 }
 
-function addTool() {
-  const name = normalizeIdea(toolNameInput.value);
-  const price = Number(toolPriceInput.value || 0);
-
-  if (!name) {
-    toolNameInput.focus();
-    return;
-  }
-
-  tools = [
-    {
-      name,
-      role: price > 0 ? "De pago" : "Gratis",
-      description: "Herramienta guardada por el usuario para reutilizar, compartir o vender en NEXO.",
-      price: Math.max(0, price)
-    },
-    ...tools
-  ];
-
-  toolNameInput.value = "";
-  toolPriceInput.value = "";
-  saveTools();
-  renderTools();
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[char]));
 }
 
-function saveProject() {
-  if (project) {
-    localStorage.setItem("nexo-project", JSON.stringify(project));
-  } else {
-    localStorage.removeItem("nexo-project");
-  }
+function updateActiveNav() {
+  const hash = window.location.hash || '#dashboard';
+  document.querySelectorAll('.bottom-nav a').forEach((link) => {
+    link.classList.toggle('active', link.getAttribute('href') === hash);
+  });
 }
 
-function loadProject() {
-  const storedProject = localStorage.getItem("nexo-project");
-
-  if (!storedProject) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(storedProject);
-  } catch {
-    localStorage.removeItem("nexo-project");
-    return null;
-  }
-}
-
-function generatePlan() {
-  const idea = normalizeIdea(ideaInput.value);
-
+byId('generatePlan').addEventListener('click', () => {
+  const idea = byId('ideaInput').value.trim();
   if (!idea) {
-    ideaInput.focus();
-    ideaInput.placeholder = "Escribe una idea antes de generar el plan.";
+    byId('ideaInput').focus();
     return;
   }
 
-  project = createPlan(idea);
-  saveProject();
-  renderProject();
-  setScreen("planner");
-}
-
-navItems.forEach((item) => {
-  item.addEventListener("click", () => {
-    const template = item.dataset.template;
-
-    if (template) {
-      ideaInput.value = templates[template];
-      setScreen("idea");
-      ideaInput.focus();
-      return;
-    }
-
-    setScreen(item.dataset.go);
-  });
+  const plan = makePlan(idea);
+  state.ideas.unshift(idea);
+  state.plan = plan;
+  state.tasks = plan.tasks;
+  saveState();
+  renderPlan();
+  renderStats();
+  window.location.hash = '#planner';
 });
 
-document.querySelectorAll("[data-prompt]").forEach((chip) => {
-  chip.addEventListener("click", () => {
-    ideaInput.value = chip.dataset.prompt;
-    ideaInput.focus();
-  });
+byId('clearData').addEventListener('click', () => {
+  state = { ideas: [], tasks: [], tools: starterTools };
+  byId('ideaInput').value = '';
+  saveState();
+  renderPlan();
+  renderTools();
+  renderStats();
 });
 
-generatePlanButton.addEventListener("click", generatePlan);
-
-ideaInput.addEventListener("keydown", (event) => {
-  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
-    generatePlan();
-  }
+byId('toolForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  const name = byId('toolName').value.trim();
+  const price = byId('toolPrice').value.trim() || 'Gratis';
+  if (!name) return;
+  state.tools.unshift({ name, price, description: 'Herramienta creada desde NEXO para guardar, compartir o vender.' });
+  byId('toolForm').reset();
+  saveState();
+  renderTools();
+  renderStats();
 });
 
-resetButton.addEventListener("click", () => {
-  project = null;
-  ideaInput.value = "";
-  saveProject();
-  renderProject();
-  setScreen("dashboard");
-});
+window.addEventListener('hashchange', updateActiveNav);
 
-addToolButton.addEventListener("click", addTool);
-
+renderBlocks();
+renderPlan();
 renderTools();
-renderProject();
+renderStats();
+updateActiveNav();
