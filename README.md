@@ -638,3 +638,16 @@ El workflow copia a `_site/` y GitHub Pages servirá directamente:
 - `.nojekyll`
 
 No se requieren dependencias, build step ni servidor backend para esta primera versión.
+
+### Checklist de merge para GitHub Pages
+
+Antes de fusionar el pull request, confirma que la rama final incluye estos archivos versionados:
+
+- `.github/workflows/pages.yml`
+- `.nojekyll`
+- `index.html`
+- `styles.css`
+- `app.js`
+- `README.md`
+
+Si el workflow no aparece todavía en la pestaña `Actions` de `main`, es normal hasta que este pull request se fusione o hasta que el archivo exista en la rama por defecto. Una vez fusionado, GitHub detectará `.github/workflows/pages.yml` y permitirá ejecutar el despliegue de GitHub Pages.
