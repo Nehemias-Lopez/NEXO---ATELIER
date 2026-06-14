@@ -126,7 +126,25 @@ textarea:focus { border-color: rgba(32, 224, 178, 0.72); box-shadow: 0 0 0 4px r
 }
 .empty-state { color: var(--muted); line-height: 1.65; border-style: dashed; }
 .plan-stack, .agent-list, .builder-grid { display: grid; gap: 10px; }
-ul { padding-left: 20px; margin-bottom: 0; color: var(--muted); line-height: 1.7; }
+ul, ol { padding-left: 20px; margin-bottom: 0; color: var(--muted); line-height: 1.7; }
+
+.tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tool-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid rgba(32, 224, 178, 0.2);
+  border-radius: 999px;
+  background: rgba(32, 224, 178, 0.11);
+  color: var(--brand-2);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
 .accent-card { background: rgba(124, 92, 255, 0.14); }
 .agent-card { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
 .agent-card .status-pill { flex: 0 0 auto; }

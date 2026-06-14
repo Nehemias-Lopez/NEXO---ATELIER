@@ -1,4 +1,4 @@
-const storageKey = 'nexo-atelier-state';
+const storageKey = 'nexo-atelier-m02-state';
 
 const defaultAgents = [
   { role: 'Estratega', mission: 'Convierte una idea ambigua en objetivo, alcance y prioridades.', status: 'Listo' },
@@ -9,27 +9,30 @@ const defaultAgents = [
 ];
 
 const builderBlocks = [
-  { title: 'Pantalla', text: 'Una vista enfocada en una tarea clave del usuario.' },
-  { title: 'Formulario', text: 'Entrada simple para capturar información desde móvil.' },
-  { title: 'Plan', text: 'Objetivo, fases y tareas persistidas localmente.' },
-  { title: 'Agente', text: 'Rol especializado que ayuda a ejecutar una parte del proyecto.' },
+  { title: 'Idea', text: 'Texto inicial capturado desde el teléfono.' },
+  { title: 'Plan M0.2', text: 'Resumen, objetivo, MVP, 5 tareas, herramientas y próxima acción.' },
+  { title: 'Persistencia', text: 'Estado guardado en localStorage sin backend ni API keys.' },
+  { title: 'Agent Center', text: 'Roles ligeros para revisar estrategia, UX, código y calidad.' },
   { title: 'Deploy', text: 'Publica el sitio desde el repositorio ATELIER con GitHub Pages.' }
 ];
-
-let state = loadState();
 
 function initialState() {
   return {
     ideas: [],
+    lastIdea: '',
     tasks: [],
+    tools: [],
     plan: null,
     agents: defaultAgents
   };
 }
 
+let state = loadState();
+
 function loadState() {
   try {
-    return { ...initialState(), ...JSON.parse(localStorage.getItem(storageKey)) };
+    const savedState = JSON.parse(localStorage.getItem(storageKey));
+    return { ...initialState(), ...savedState };
   } catch {
     return initialState();
   }
@@ -53,56 +56,98 @@ function escapeHtml(value) {
   }[char]));
 }
 
+function summarizeIdea(idea) {
+  const cleanIdea = idea.replace(/\s+/g, ' ').trim();
+  if (cleanIdea.length <= 130) return cleanIdea;
+  return `${cleanIdea.slice(0, 127)}...`;
+}
+
+function inferAudience(idea) {
+  const lowerIdea = idea.toLowerCase();
+  if (lowerIdea.includes('venta') || lowerIdea.includes('tienda') || lowerIdea.includes('cliente')) return 'clientes que necesitan comprar o solicitar el servicio rápido desde móvil';
+  if (lowerIdea.includes('estudiante') || lowerIdea.includes('curso') || lowerIdea.includes('aprender')) return 'personas que quieren aprender con pasos simples y seguimiento claro';
+  if (lowerIdea.includes('negocio') || lowerIdea.includes('empresa')) return 'equipos pequeños que necesitan organizar operación, tareas y entregables';
+  return 'usuarios que necesitan resolver el problema principal con la menor fricción posible';
+}
+
+function recommendTools(idea) {
+  const lowerIdea = idea.toLowerCase();
+  const tools = ['NEXO Planner', 'Checklist de validación', 'Tablero de tareas móvil'];
+
+  if (lowerIdea.includes('venta') || lowerIdea.includes('tienda') || lowerIdea.includes('pago')) {
+    tools.push('Catálogo simple', 'Calculadora de precios');
+  } else if (lowerIdea.includes('contenido') || lowerIdea.includes('redes') || lowerIdea.includes('marketing')) {
+    tools.push('Calendario de contenido', 'Generador de mensajes');
+  } else if (lowerIdea.includes('app') || lowerIdea.includes('web') || lowerIdea.includes('sitio')) {
+    tools.push('Wireframe mobile', 'Publicador GitHub Pages');
+  } else {
+    tools.push('Mapa de usuario', 'Documento de alcance');
+  }
+
+  return tools.slice(0, 5);
+}
+
 function makePlan(idea) {
-  const cleanIdea = idea.trim();
+  const cleanIdea = idea.replace(/\s+/g, ' ').trim();
+  const audience = inferAudience(cleanIdea);
+  const tools = recommendTools(cleanIdea);
   const tasks = [
-    `Definir usuario principal y problema para: ${cleanIdea}`,
-    'Reducir el alcance a una sola experiencia mobile-first.',
-    'Crear estructura HTML de las pantallas necesarias.',
-    'Aplicar diseño oscuro, legible y táctil para iPhone y Android.',
-    'Guardar estado con localStorage para funcionar sin backend.',
-    'Publicar desde el repositorio ATELIER y validar GitHub Pages desde un teléfono.'
+    `Definir el usuario principal: ${audience}.`,
+    'Escribir el problema en una frase y confirmar que es urgente o frecuente.',
+    'Diseñar una pantalla móvil con el flujo principal de inicio a resultado.',
+    'Construir un MVP estático con captura de datos, plan visible y persistencia local.',
+    'Probar el flujo completo en un teléfono y anotar 3 mejoras prioritarias.'
   ];
 
   return {
-    objective: `Lanzar una versión M0.1 navegable de “${cleanIdea}”.`,
-    phases: ['Clarificar', 'Prototipar', 'Persistir', 'Publicar'],
-    nextStep: 'Construir la pantalla más importante y probarla con un usuario real.',
-    tasks
+    summary: summarizeIdea(cleanIdea),
+    objective: `Convertir la idea en una primera solución usable para ${audience}.`,
+    mvp: 'Una página mobile-first que capture la necesidad, muestre un resultado útil, guarde el progreso en el dispositivo y pueda publicarse con GitHub Pages.',
+    tasks,
+    tools,
+    nextAction: 'Crear el primer prototipo navegable con una sola pantalla crítica y probarlo hoy con una persona real.'
   };
 }
 
 function renderStats() {
   byId('ideasCount').textContent = state.ideas.length;
   byId('tasksCount').textContent = state.tasks.length;
-  byId('agentsCount').textContent = state.agents.length;
+  byId('toolsCount').textContent = state.tools.length;
 }
 
 function renderPlan() {
   const output = byId('planOutput');
   if (!state.plan) {
     output.className = 'empty-state';
-    output.textContent = 'Captura una idea para generar objetivo, fases, tareas y próximos pasos.';
+    output.textContent = 'Captura una idea para generar resumen, objetivo, MVP, 5 tareas, herramientas y próxima acción.';
     return;
   }
 
   output.className = 'plan-stack';
   output.innerHTML = `
     <article class="info-card">
-      <p class="eyebrow">Objetivo</p>
+      <p class="eyebrow">Resumen de la idea</p>
+      <p>${escapeHtml(state.plan.summary)}</p>
+    </article>
+    <article class="info-card">
+      <p class="eyebrow">Objetivo principal</p>
       <h3>${escapeHtml(state.plan.objective)}</h3>
     </article>
     <article class="info-card">
-      <p class="eyebrow">Fases</p>
-      <ul>${state.plan.phases.map((phase) => `<li>${escapeHtml(phase)}</li>`).join('')}</ul>
+      <p class="eyebrow">MVP sugerido</p>
+      <p>${escapeHtml(state.plan.mvp)}</p>
     </article>
     <article class="info-card">
-      <p class="eyebrow">Tareas</p>
-      <ul>${state.plan.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('')}</ul>
+      <p class="eyebrow">5 tareas concretas</p>
+      <ol>${state.plan.tasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('')}</ol>
+    </article>
+    <article class="info-card">
+      <p class="eyebrow">Herramientas recomendadas</p>
+      <div class="tool-tags">${state.plan.tools.map((tool) => `<span>${escapeHtml(tool)}</span>`).join('')}</div>
     </article>
     <article class="info-card accent-card">
-      <p class="eyebrow">Próximo paso</p>
-      <p>${escapeHtml(state.plan.nextStep)}</p>
+      <p class="eyebrow">Próxima acción</p>
+      <p>${escapeHtml(state.plan.nextAction)}</p>
     </article>
   `;
 }
@@ -135,7 +180,7 @@ function updateActiveNav() {
   });
 }
 
-byId('generatePlan').addEventListener('click', () => {
+function captureAndPlan() {
   const idea = byId('ideaInput').value.trim();
   if (!idea) {
     byId('ideaInput').focus();
@@ -143,26 +188,33 @@ byId('generatePlan').addEventListener('click', () => {
   }
 
   const plan = makePlan(idea);
-  state.ideas.unshift(idea);
+  state.lastIdea = idea;
+  state.ideas = [idea, ...state.ideas.filter((savedIdea) => savedIdea !== idea)].slice(0, 10);
   state.plan = plan;
   state.tasks = plan.tasks;
+  state.tools = plan.tools;
   saveState();
   renderPlan();
   renderStats();
   window.location.hash = '#planner';
-});
+}
 
-byId('clearData').addEventListener('click', () => {
+function resetData() {
   state = initialState();
   byId('ideaInput').value = '';
-  saveState();
+  localStorage.removeItem(storageKey);
   renderPlan();
   renderAgents();
+  renderBlocks();
   renderStats();
-});
+}
 
+byId('captureIdea').addEventListener('click', captureAndPlan);
+byId('generatePlan').addEventListener('click', captureAndPlan);
+byId('clearData').addEventListener('click', resetData);
 window.addEventListener('hashchange', updateActiveNav);
 
+byId('ideaInput').value = state.lastIdea || '';
 renderPlan();
 renderAgents();
 renderBlocks();
