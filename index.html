@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>NEXO Mobile Control Center</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">NEXO</p>
+          <h1>Mobile Control Center</h1>
+        </div>
+        <button class="icon-button" id="resetButton" aria-label="Reiniciar proyecto">↺</button>
+      </header>
+
+      <main>
+        <section class="screen active" id="dashboard" data-screen="dashboard" aria-labelledby="dashboard-title">
+          <div class="hero-card">
+            <p class="eyebrow">Centro universal impulsado por IA</p>
+            <h2 id="dashboard-title">Convierte una idea en un plan accionable desde tu teléfono.</h2>
+            <p>Captura, ordena, construye y organiza herramientas reutilizables con una interfaz ligera para navegador móvil.</p>
+            <button class="primary-action" data-go="idea">Crear algo nuevo</button>
+          </div>
+
+          <div class="quick-grid" aria-label="Acciones rápidas">
+            <button class="quick-card" data-template="landing">Landing page</button>
+            <button class="quick-card" data-template="negocio">Plan de negocio</button>
+            <button class="quick-card" data-template="automatizacion">Automatización</button>
+            <button class="quick-card" data-template="app">App simple</button>
+          </div>
+
+          <article class="status-card">
+            <div>
+              <span class="status-dot"></span>
+              <strong id="projectStatus">Sin proyecto activo</strong>
+            </div>
+            <p id="projectSummary">Describe una idea para que NODO genere objetivos, tareas y próximos pasos.</p>
+          </article>
+        </section>
+
+        <section class="screen" id="idea" data-screen="idea" aria-labelledby="idea-title">
+          <div class="section-heading">
+            <p class="eyebrow">Núcleo 1 · Pensar</p>
+            <h2 id="idea-title">Captura tu idea</h2>
+            <p>Escribe como puedas. NEXO la convertirá en una estructura clara.</p>
+          </div>
+
+          <label class="input-label" for="ideaInput">Idea inicial</label>
+          <textarea id="ideaInput" rows="8" placeholder="Ejemplo: Quiero crear una página para vender postres desde mi barrio y recibir pedidos por WhatsApp."></textarea>
+
+          <div class="chip-row" aria-label="Sugerencias">
+            <button class="chip" data-prompt="Quiero lanzar un negocio local con catálogo, pagos y contacto por WhatsApp.">Negocio local</button>
+            <button class="chip" data-prompt="Quiero crear una app sencilla para organizar tareas de estudiantes.">App educativa</button>
+            <button class="chip" data-prompt="Quiero automatizar respuestas frecuentes para clientes de una microempresa.">Automatización</button>
+          </div>
+
+          <button class="primary-action sticky-action" id="generatePlanButton">Ordenar mi idea</button>
+        </section>
+
+        <section class="screen" id="planner" data-screen="planner" aria-labelledby="planner-title">
+          <div class="section-heading">
+            <p class="eyebrow">Núcleo 2 · Crear</p>
+            <h2 id="planner-title">Project Planner</h2>
+            <p>Objetivo, estrategia y tareas generadas para avanzar rápido.</p>
+          </div>
+
+          <article class="plan-card">
+            <p class="eyebrow">Objetivo</p>
+            <h3 id="planGoal">Aún no hay plan</h3>
+            <p id="planDescription">Captura una idea para generar el plan inicial.</p>
+          </article>
+
+          <div class="task-panel">
+            <div class="panel-title">
+              <h3>Tareas sugeridas</h3>
+              <span id="taskCount">0</span>
+            </div>
+            <ul class="task-list" id="taskList"></ul>
+          </div>
+
+          <button class="secondary-action" data-go="builder">Abrir Builder</button>
+        </section>
+
+        <section class="screen" id="builder" data-screen="builder" aria-labelledby="builder-title">
+          <div class="section-heading">
+            <p class="eyebrow">Sistema ATELIER</p>
+            <h2 id="builder-title">Builder</h2>
+            <p>Primeros bloques visuales para convertir el plan en un entregable compartible.</p>
+          </div>
+
+          <div class="builder-preview" id="builderPreview">
+            <div class="preview-hero">
+              <span>Vista previa</span>
+              <h3 id="previewTitle">Tu proyecto aparecerá aquí</h3>
+              <p id="previewCopy">Genera un plan para crear una primera landing o documento.</p>
+              <button>Contactar</button>
+            </div>
+          </div>
+
+          <div class="block-list" id="blockList">
+            <article class="block-card">
+              <span>Bloque</span>
+              <strong>Hero principal</strong>
+              <p>Título, propuesta de valor y llamada a la acción.</p>
+            </article>
+            <article class="block-card">
+              <span>Bloque</span>
+              <strong>Lista de beneficios</strong>
+              <p>Razones claras para que el usuario entienda el valor.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="screen" id="agents" data-screen="agents" aria-labelledby="agents-title">
+          <div class="section-heading">
+            <p class="eyebrow">Biblioteca NEXO</p>
+            <h2 id="agents-title">Herramientas</h2>
+            <p>Herramientas para pensar, crear, revisar, compartir y monetizar.</p>
+          </div>
+
+          <div class="tool-composer">
+            <label class="input-label" for="toolNameInput">Nueva herramienta</label>
+            <input id="toolNameInput" type="text" placeholder="Ejemplo: Generador de menú semanal" />
+            <div class="price-row">
+              <input id="toolPriceInput" type="number" min="0" step="1" placeholder="Precio USD (0 = gratis)" />
+              <button class="secondary-action compact-action" id="addToolButton">Guardar</button>
+            </div>
+          </div>
+
+          <div class="agent-list" id="agentList"></div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-go="dashboard"><span>⌂</span>Inicio</button>
+        <button class="nav-item" data-go="idea"><span>＋</span>Idea</button>
+        <button class="nav-item" data-go="planner"><span>☷</span>Plan</button>
+        <button class="nav-item" data-go="builder"><span>▣</span>Builder</button>
+        <button class="nav-item" data-go="agents"><span>◌</span>Herr.</button>
+      </nav>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
