@@ -1,4 +1,4 @@
-const storageKey = 'nexo-m01-public-repo-state';
+const storageKey = 'nexo-atelier-state';
 
 const defaultAgents = [
   { role: 'Estratega', mission: 'Convierte una idea ambigua en objetivo, alcance y prioridades.', status: 'Listo' },
@@ -13,7 +13,7 @@ const builderBlocks = [
   { title: 'Formulario', text: 'Entrada simple para capturar información desde móvil.' },
   { title: 'Plan', text: 'Objetivo, fases y tareas persistidas localmente.' },
   { title: 'Agente', text: 'Rol especializado que ayuda a ejecutar una parte del proyecto.' },
-  { title: 'Deploy', text: 'Publica el sitio desde el repositorio público NEXO-M0.1 con GitHub Pages.' }
+  { title: 'Deploy', text: 'Publica el sitio desde el repositorio ATELIER con GitHub Pages.' }
 ];
 
 let state = loadState();
@@ -61,7 +61,7 @@ function makePlan(idea) {
     'Crear estructura HTML de las pantallas necesarias.',
     'Aplicar diseño oscuro, legible y táctil para iPhone y Android.',
     'Guardar estado con localStorage para funcionar sin backend.',
-    'Subir a un repositorio público llamado NEXO-M0.1 y validar GitHub Pages desde un teléfono.'
+    'Publicar desde el repositorio ATELIER y validar GitHub Pages desde un teléfono.'
   ];
 
   return {

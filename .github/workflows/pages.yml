@@ -1,4 +1,4 @@
-name: Deploy NEXO-M0.1 to GitHub Pages
+name: Deploy NEXO ATELIER to GitHub Pages
 
 on:
   push:
