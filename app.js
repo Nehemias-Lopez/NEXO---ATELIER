@@ -67,8 +67,12 @@ const defaultTemplate = {
   roadmap: ['Definir usuario principal', 'Escribir problema y objetivo', 'Reducir alcance del MVP', 'Diseñar flujo móvil', 'Crear prototipo estático', 'Probar con una persona', 'Priorizar mejoras']
 };
 
+function cloneTools(tools = baseTools) {
+  return tools.map((tool) => ({ ...tool }));
+}
+
 function initialState() {
-  return { ideas: [], lastIdea: '', plan: null, tasks: [], completedTasks: {}, tools: baseTools, lastUpdated: null };
+  return { ideas: [], lastIdea: '', plan: null, tasks: [], completedTasks: {}, tools: cloneTools(), lastUpdated: null };
 }
 
 let state = loadState();
@@ -82,7 +86,8 @@ function escapeHtml(value) {
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    return { ...initialState(), ...saved, tools: Array.isArray(saved?.tools) && saved.tools.length ? saved.tools : baseTools };
+    const savedTools = Array.isArray(saved?.tools) && saved.tools.length ? saved.tools : baseTools;
+    return { ...initialState(), ...saved, tools: cloneTools(savedTools) };
   } catch {
     return initialState();
   }

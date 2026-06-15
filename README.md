@@ -11,6 +11,7 @@ The project remains simple and GitHub Pages friendly:
 - Local plan generation with JavaScript keyword templates.
 - `localStorage` persistence for the last idea, generated plan, task completion state, custom tools, counters, and saved timestamp.
 - Copy-to-clipboard, `.txt` download, reset, bottom navigation, and custom tool creation.
+- Reset restores a fresh copy of the default tools so generated or custom tools do not leak back into the default state.
 
 ### v0.3 improvements
 
