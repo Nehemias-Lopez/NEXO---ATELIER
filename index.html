@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)" />
-    <meta name="description" content="NEXO v0.3: prototipo mobile-first para convertir ideas en planes accionables y herramientas guardadas localmente." />
-    <title>NEXO v0.3 — Mobile Control Center</title>
+    <meta name="description" content="NEXO Engine v1: sistema estático mobile-first para convertir ideas en proyectos, guardar historial, conversar localmente y compartir resúmenes." />
+    <title>NEXO Engine v1 — ATELIER</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -18,15 +18,15 @@
         <nav class="topbar" aria-label="Navegación principal">
           <a class="brand" href="#inicio" data-scroll-target="inicio" aria-label="Ir al inicio de NEXO">
             <span class="brand-mark">N</span>
-            <span>NEXO <small>v0.3</small></span>
+            <span>NEXO <small>Engine v1</small></span>
           </a>
           <span class="status-pill" id="saveStatus">Local</span>
         </nav>
 
         <section class="hero-card glass-card">
-          <p class="eyebrow">Mobile Control Center</p>
-          <h1>Convierte una idea en un plan accionable desde tu teléfono.</h1>
-          <p class="hero-copy">NEXO es un constructor local que entiende tu idea, genera tareas, recomienda herramientas y guarda tu progreso sin backend ni APIs.</p>
+          <p class="eyebrow">Creation Operating System</p>
+          <h1>Convierte una idea en un proyecto vivo desde tu teléfono.</h1>
+          <p class="hero-copy">NEXO Engine es un constructor local: desarrolla tu idea, crea tareas, guarda historial, responde preguntas del proyecto y genera un resumen listo para compartir.</p>
           <div class="hero-actions">
             <button class="button primary" id="heroCapture" type="button">Capturar idea</button>
             <button class="button secondary" id="heroPlan" type="button">Ver plan</button>
@@ -46,8 +46,8 @@
         <section class="panel glass-card section" id="idea">
           <div class="section-heading">
             <p class="eyebrow">Idea Capture</p>
-            <h2>¿Qué quieres crear?</h2>
-            <p>Escribe una frase simple. NEXO generará un plan útil en español usando lógica local.</p>
+            <h2>¿Qué quieres construir?</h2>
+            <p>Escribe una idea simple. NEXO la expandirá en proyecto, problema, usuario, valor, MVP, fases, tareas y próximas acciones.</p>
           </div>
           <label for="ideaInput">Idea inicial</label>
           <textarea id="ideaInput" rows="6" placeholder="Ejemplo: Quiero vender plantillas digitales desde mi teléfono"></textarea>
@@ -61,29 +61,58 @@
           </div>
         </section>
 
+        <section class="panel glass-card section" id="history">
+          <div class="section-heading">
+            <p class="eyebrow">Idea History</p>
+            <h2>Ideas guardadas</h2>
+            <p>Selecciona un proyecto, cambia su visibilidad o copia un resumen limpio para compartir.</p>
+          </div>
+          <div class="idea-history" id="ideaHistory"></div>
+        </section>
+
         <section class="panel glass-card section" id="plan">
           <div class="section-heading">
-            <p class="eyebrow">Project Planner</p>
-            <h2>Plan generado</h2>
-            <p>Checklist, riesgos, herramientas y roadmap listos para ejecutar.</p>
+            <p class="eyebrow">Project Engine</p>
+            <h2>Plan desarrollado</h2>
+            <p>Un proyecto usable con fases, tareas checkables, herramientas y acciones inmediatas.</p>
           </div>
-          <div id="planOutput" class="empty-state">Captura una idea para generar resumen, objetivo, MVP, 5 tareas, herramientas, riesgos, próxima acción y roadmap de 7 días.</div>
+          <div id="planOutput" class="empty-state">Captura una idea para generar el plan desarrollado.</div>
+        </section>
+
+        <section class="panel glass-card section" id="chat">
+          <div class="section-heading">
+            <p class="eyebrow">Project Chat</p>
+            <h2>Pregunta al proyecto</h2>
+            <p>Chat local sin APIs. NEXO responde usando el plan seleccionado.</p>
+          </div>
+          <div class="chat-history" id="chatHistory"></div>
+          <form class="chat-form" id="chatForm">
+            <label for="chatInput">Pregunta</label>
+            <div class="chat-row">
+              <input id="chatInput" type="text" autocomplete="off" placeholder="¿Qué hago primero?" />
+              <button class="button primary compact" type="submit">Enviar</button>
+            </div>
+          </form>
         </section>
 
         <section class="panel glass-card section" id="builder">
           <div class="section-heading">
             <p class="eyebrow">Builder</p>
-            <h2>Bloques de construcción</h2>
-            <p>El flujo base para pasar de idea a resultado real.</p>
+            <h2>Flujo NEXO</h2>
+            <p>IDEA → ENTENDER → PLANIFICAR → CONSTRUIR → EJECUTAR → MEJORAR.</p>
           </div>
-          <div class="builder-grid" id="builderBlocks"></div>
+          <div class="builder-grid">
+            <article class="info-card"><h3>Entender</h3><p>Convierte una frase desordenada en problema, usuario y valor.</p></article>
+            <article class="info-card"><h3>Planificar</h3><p>Reduce el alcance a un MVP que puedas ejecutar desde móvil.</p></article>
+            <article class="info-card"><h3>Ejecutar</h3><p>Usa tareas, herramientas, chat y feedback para avanzar cada día.</p></article>
+          </div>
         </section>
 
         <section class="panel glass-card section" id="tools">
           <div class="section-heading">
             <p class="eyebrow">Tools</p>
             <h2>Herramientas guardadas</h2>
-            <p>Agrega recursos, servicios o herramientas propias para usar o compartir después.</p>
+            <p>Agrega recursos, servicios o herramientas propias para usar en tus proyectos.</p>
           </div>
           <form class="tool-form" id="toolForm">
             <label for="toolName">Nueva herramienta</label>
@@ -101,8 +130,9 @@
     <nav class="bottom-nav" aria-label="Navegación móvil">
       <button type="button" data-scroll-target="inicio">Inicio</button>
       <button type="button" data-scroll-target="idea">Idea</button>
+      <button type="button" data-scroll-target="history">Ideas</button>
       <button type="button" data-scroll-target="plan">Plan</button>
-      <button type="button" data-scroll-target="builder">Builder</button>
+      <button type="button" data-scroll-target="chat">Chat</button>
       <button type="button" data-scroll-target="tools">Tools</button>
     </nav>
 

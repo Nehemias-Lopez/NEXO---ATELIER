@@ -1,93 +1,87 @@
-const storageKey = 'nexo-atelier-v03-state';
+const storageKey = 'nexo-engine-v1-state';
 
 const baseTools = [
-  { name: 'NEXO Planner', price: 'Gratis', description: 'Genera planes locales y tareas accionables.' },
-  { name: 'Plantilla de landing', price: 'Gratis', description: 'Estructura simple para presentar una oferta.' },
-  { name: 'Checklist QA móvil', price: 'Gratis', description: 'Pruebas rápidas antes de compartir el prototipo.' }
-];
-
-const builderBlocks = [
-  { title: '1. Entender', text: 'Resume la idea, define usuario y objetivo principal.' },
-  { title: '2. Planificar', text: 'Reduce el alcance a un MVP ejecutable desde móvil.' },
-  { title: '3. Construir', text: 'Convierte tareas en pantallas, contenido, documentos o herramientas.' },
-  { title: '4. Ejecutar', text: 'Avanza con checklist, herramientas recomendadas y próxima acción.' },
-  { title: '5. Mejorar', text: 'Usa feedback real para ajustar el plan sin perder simplicidad.' }
+  { name: 'NEXO Engine', price: 'Gratis', description: 'Expande ideas en proyectos accionables localmente.' },
+  { name: 'Checklist MVP', price: 'Gratis', description: 'Reduce el alcance a una primera versión útil.' },
+  { name: 'Guía de validación', price: 'Gratis', description: 'Preguntas para validar problema, usuario y propuesta.' }
 ];
 
 const templates = [
   {
-    type: 'ecommerce',
-    keywords: ['ecommerce', 'tienda', 'vender', 'venta', 'producto', 'plantilla', 'plantillas', 'catálogo', 'pago'],
-    targetUser: 'personas que quieren comprar una solución digital rápida desde el móvil',
-    objective: 'validar una oferta vendible con una página clara, precio simple y entrega manual al inicio',
-    mvp: 'una landing mobile-first con 1 producto principal, beneficios, precio, botón de contacto o pago y registro básico de interesados',
-    tools: ['Plantilla de landing', 'Calculadora de precio', 'Checklist de oferta', 'Registro de pedidos', 'Mensaje de venta'],
-    risks: ['No definir un comprador específico', 'Publicar demasiados productos al inicio', 'No explicar el beneficio concreto', 'No tener un método simple de cobro o entrega'],
-    roadmap: ['Definir producto y comprador ideal', 'Escribir promesa, beneficios y precio', 'Crear landing mobile-first', 'Agregar contacto o pago manual', 'Pedir feedback a 3 compradores potenciales', 'Ajustar oferta con respuestas reales', 'Publicar y medir interesados']
+    type: 'commerce',
+    keywords: ['vender', 'tienda', 'ecommerce', 'producto', 'plantilla', 'plantillas', 'pago', 'cliente'],
+    problem: 'personas con una necesidad concreta no encuentran una solución simple, rápida y accesible desde el móvil',
+    targetUser: 'creadores, emprendedores y compradores que quieren resolver una tarea sin procesos complejos',
+    value: 'una oferta clara, comprable y fácil de entregar desde el teléfono',
+    mvp: ['Landing mobile con una oferta principal', 'Catálogo mínimo de 1 a 3 productos', 'Botón de contacto o pago manual', 'Entrega simple por enlace, email o mensaje'],
+    phases: ['Definir oferta', 'Publicar demo', 'Validar ventas', 'Automatizar entrega'],
+    tools: ['Landing simple', 'WhatsApp/Email', 'Stripe o pago manual', 'Plantilla de seguimiento'],
+    risks: ['Precio poco claro', 'Demasiados productos al inicio', 'No hablar con compradores reales']
   },
   {
     type: 'software',
-    keywords: ['app', 'software', 'plataforma', 'web', 'saas', 'sistema'],
-    targetUser: 'usuarios que necesitan completar una tarea digital sin fricción',
-    objective: 'probar el flujo principal antes de construir funciones avanzadas',
-    mvp: 'un prototipo web estático con entrada de datos, resultado visible, persistencia local y navegación móvil',
-    tools: ['Mapa de flujo', 'Wireframe mobile', 'Backlog MVP', 'Checklist QA', 'GitHub Pages'],
-    risks: ['Construir demasiadas pantallas', 'No validar el flujo principal', 'Ignorar rendimiento móvil', 'No guardar progreso'],
-    roadmap: ['Definir usuario y tarea central', 'Dibujar flujo en 3 pasos', 'Crear HTML base', 'Aplicar diseño mobile-first', 'Agregar JavaScript local', 'Probar en teléfono', 'Publicar demo y pedir feedback']
+    keywords: ['app', 'software', 'plataforma', 'web', 'saas', 'sistema', 'automatizar'],
+    problem: 'un usuario pierde tiempo haciendo manualmente una tarea repetible',
+    targetUser: 'personas que necesitan completar una acción digital con menos pasos',
+    value: 'un flujo simple que captura datos, genera un resultado y guarda progreso',
+    mvp: ['Pantalla de entrada', 'Motor local de resultado', 'Checklist de ejecución', 'Persistencia en el navegador'],
+    phases: ['Mapear flujo', 'Construir prototipo', 'Probar en móvil', 'Iterar con feedback'],
+    tools: ['HTML/CSS/JS', 'GitHub Pages', 'LocalStorage', 'Checklist QA móvil'],
+    risks: ['Construir funciones secundarias', 'Ignorar Safari móvil', 'No validar el flujo central']
   },
   {
     type: 'content',
-    keywords: ['contenido', 'tiktok', 'youtube', 'redes', 'instagram', 'creator', 'video'],
-    targetUser: 'audiencia que consume contenido corto y necesita valor inmediato',
-    objective: 'crear un sistema repetible de contenido con una promesa clara',
-    mvp: 'un calendario de 7 publicaciones con tema, gancho, formato, CTA y métrica de aprendizaje',
-    tools: ['Calendario editorial', 'Banco de hooks', 'Guion corto', 'Checklist de publicación', 'Tracker de métricas'],
-    risks: ['Publicar sin nicho claro', 'No medir respuestas', 'Copiar formatos sin propuesta propia', 'Abandonar antes de iterar'],
-    roadmap: ['Elegir nicho y promesa', 'Crear 10 hooks', 'Grabar 2 piezas simples', 'Publicar primera pieza', 'Medir comentarios y retención', 'Repetir el mejor formato', 'Planear la semana siguiente']
+    keywords: ['contenido', 'tiktok', 'youtube', 'redes', 'instagram', 'video', 'creator'],
+    problem: 'crear contenido sin sistema consume energía y no produce aprendizaje claro',
+    targetUser: 'creadores que quieren publicar de forma consistente desde el teléfono',
+    value: 'un sistema de ideas, guiones y métricas para mejorar cada semana',
+    mvp: ['Calendario de 7 piezas', 'Banco de hooks', 'Plantilla de guion corto', 'Registro de métricas'],
+    phases: ['Definir nicho', 'Crear formatos', 'Publicar pruebas', 'Doblar en lo que funciona'],
+    tools: ['Notas', 'CapCut', 'Calendario', 'Tracker de métricas'],
+    risks: ['Nicho difuso', 'No medir retención', 'Cambiar de formato demasiado pronto']
   },
   {
     type: 'business',
-    keywords: ['negocio', 'dinero', 'ingreso', 'ingresos', 'libertad financiera', 'emprender', 'monetizar'],
-    targetUser: 'personas que buscan generar ingresos con recursos limitados',
-    objective: 'crear una primera oferta monetizable y validarla con conversaciones reales',
-    mvp: 'una oferta simple con problema, promesa, precio inicial, canal de venta y lista de primeros prospectos',
-    tools: ['Validador de oferta', 'Calculadora de margen', 'Lista de prospectos', 'Script de venta', 'Tracker de ingresos'],
-    risks: ['Elegir una idea sin comprador', 'No hablar con prospectos', 'Calcular mal precio o margen', 'No medir respuestas'],
-    roadmap: ['Definir habilidad o recurso disponible', 'Elegir problema con disposición de pago', 'Crear oferta mínima', 'Contactar 10 prospectos', 'Registrar respuestas', 'Cerrar preventa o primera venta', 'Ajustar precio y entrega']
+    keywords: ['negocio', 'dinero', 'ingreso', 'ingresos', 'financiera', 'emprender', 'monetizar'],
+    problem: 'personas con recursos limitados necesitan convertir habilidades en una oferta vendible',
+    targetUser: 'emprendedores móviles que quieren validar ingresos sin infraestructura costosa',
+    value: 'una oferta mínima con cliente, precio, entrega y siguiente venta claros',
+    mvp: ['Oferta de una página', 'Lista de 20 prospectos', 'Script de conversación', 'Registro de respuestas'],
+    phases: ['Elegir problema pagable', 'Crear oferta', 'Contactar prospectos', 'Cerrar primera venta'],
+    tools: ['Documento de oferta', 'CRM simple', 'Calculadora de margen', 'Mensaje de venta'],
+    risks: ['No contactar clientes', 'Precio sin margen', 'Confundir idea con demanda real']
   }
 ];
 
 const defaultTemplate = {
-  type: 'generic',
-  targetUser: 'personas que necesitan resolver el problema principal con la menor fricción posible',
-  objective: 'convertir la idea en una solución pequeña, clara y comprobable',
-  mvp: 'una página mobile-first que explique el problema, capture información clave, muestre un resultado útil y guarde progreso local',
-  tools: ['NEXO Planner', 'Checklist de validación', 'Mapa de usuario', 'Tablero de tareas', 'Documento de alcance'],
-  risks: ['Alcance demasiado amplio', 'Usuario objetivo poco definido', 'No probar en teléfono', 'Falta de feedback real'],
-  roadmap: ['Definir usuario principal', 'Escribir problema y objetivo', 'Reducir alcance del MVP', 'Diseñar flujo móvil', 'Crear prototipo estático', 'Probar con una persona', 'Priorizar mejoras']
+  type: 'general',
+  problem: 'la idea todavía está desordenada y necesita convertirse en un proyecto concreto',
+  targetUser: 'personas que quieren resolver el problema con una solución simple y accesible',
+  value: 'claridad, foco y una primera versión ejecutable desde el móvil',
+  mvp: ['Pantalla o documento principal', 'Resultado útil visible', 'Checklist de tareas', 'Forma simple de compartir feedback'],
+  phases: ['Entender', 'Planificar', 'Construir', 'Validar'],
+  tools: ['NEXO Engine', 'Notas', 'GitHub Pages', 'Checklist de feedback'],
+  risks: ['Alcance amplio', 'Usuario poco definido', 'Falta de prueba real']
 };
 
-function cloneTools(tools = baseTools) {
-  return tools.map((tool) => ({ ...tool }));
-}
+function cloneTools(tools = baseTools) { return tools.map((tool) => ({ ...tool })); }
+function uid() { return `idea-${Date.now()}-${Math.random().toString(16).slice(2)}`; }
+function byId(id) { return document.getElementById(id); }
+function clean(text) { return String(text || '').replace(/\s+/g, ' ').trim(); }
+function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char])); }
+function short(text, length = 70) { return text.length <= length ? text : `${text.slice(0, length - 1)}…`; }
 
 function initialState() {
-  return { ideas: [], lastIdea: '', plan: null, tasks: [], completedTasks: {}, tools: cloneTools(), lastUpdated: null };
+  return { ideas: [], selectedId: null, tools: cloneTools(), chat: {}, lastUpdated: null };
 }
 
 let state = loadState();
 
-function byId(id) { return document.getElementById(id); }
-function normalizeIdea(idea) { return idea.replace(/\s+/g, ' ').trim(); }
-function escapeHtml(value) {
-  return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
-}
-
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    const savedTools = Array.isArray(saved?.tools) && saved.tools.length ? saved.tools : baseTools;
-    return { ...initialState(), ...saved, tools: cloneTools(savedTools) };
+    if (!saved) return initialState();
+    return { ...initialState(), ...saved, tools: cloneTools(saved.tools?.length ? saved.tools : baseTools), chat: saved.chat || {} };
   } catch {
     return initialState();
   }
@@ -96,42 +90,68 @@ function loadState() {
 function saveState() {
   state.lastUpdated = new Date().toISOString();
   localStorage.setItem(storageKey, JSON.stringify(state));
-  renderSaveStatus();
+  renderSavedStatus();
 }
 
-function getTemplate(idea) {
-  const text = idea.toLowerCase();
-  return templates.find((template) => template.keywords.some((keyword) => text.includes(keyword))) || defaultTemplate;
+function templateFor(idea) {
+  const lower = idea.toLowerCase();
+  return templates.find((template) => template.keywords.some((keyword) => lower.includes(keyword))) || defaultTemplate;
 }
 
-function summarizeIdea(idea) { return idea.length <= 155 ? idea : `${idea.slice(0, 152)}...`; }
+function projectNameFrom(idea, template) {
+  const words = idea.replace(/[¿?¡!.,]/g, '').split(' ').filter((word) => word.length > 3).slice(0, 3);
+  const base = words.length ? words.map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'Proyecto NEXO';
+  return `${base} ${template.type === 'general' ? 'Lab' : 'Pilot'}`;
+}
 
-function makePlan(rawIdea) {
-  const idea = normalizeIdea(rawIdea);
-  const template = getTemplate(idea);
+function buildEnginePlan(idea) {
+  const template = templateFor(idea);
+  const projectName = projectNameFrom(idea, template);
   const tasks = [
-    `Definir el usuario objetivo: ${template.targetUser}.`,
-    `Transformar la idea en este MVP: ${template.mvp}.`,
-    'Crear una primera pantalla o documento que explique el valor en menos de 30 segundos.',
-    `Validar los riesgos iniciales: ${template.risks.slice(0, 2).join(' y ')}.`,
-    'Compartir el prototipo con una persona real y anotar qué entendió, qué pidió y qué pagaría.'
+    `Escribir en 3 líneas qué problema resuelve ${projectName}.`,
+    `Definir el primer usuario: ${template.targetUser}.`,
+    `Construir el MVP inicial: ${template.mvp[0]}.`,
+    `Crear una prueba de valor: ${template.value}.`,
+    'Compartir el resumen con 3 personas y registrar respuestas.',
+    'Elegir una mejora usando feedback real, no suposiciones.'
   ];
 
   return {
-    type: template.type,
-    summary: summarizeIdea(idea),
-    objective: `Usar “${idea}” para ${template.objective}.`,
+    projectName,
+    originalIdea: idea,
+    summary: short(idea, 150),
+    problem: template.problem,
     targetUser: template.targetUser,
-    mvp: template.mvp,
+    valueProposition: template.value,
+    mvpScope: template.mvp,
+    phases: template.phases.map((phase, index) => ({ name: phase, detail: phaseDetail(phase, index, template) })),
     tasks,
     tools: template.tools,
     risks: template.risks,
-    nextAction: `Hoy: ${template.roadmap[0].toLowerCase()} y completar la primera tarea del checklist.`,
-    roadmap: template.roadmap.map((item, index) => ({ day: index + 1, item }))
+    nextActions: [
+      'Pulir el problema en una frase que cualquier persona entienda.',
+      'Crear la primera pantalla, documento u oferta mínima.',
+      'Pedir feedback a una persona real hoy y guardar la respuesta.'
+    ],
+    createdAt: new Date().toISOString()
   };
 }
 
-function completedCount() { return Object.values(state.completedTasks || {}).filter(Boolean).length; }
+function phaseDetail(phase, index, template) {
+  const details = [
+    `Aclarar problema, usuario y resultado esperado para ${template.targetUser}.`,
+    `Convertir la idea en alcance pequeño: ${template.mvp.slice(0, 2).join(' + ')}.`,
+    `Producir una versión compartible usando ${template.tools.slice(0, 2).join(' y ')}.`,
+    `Medir respuestas, riesgos y la próxima mejora con evidencia.`
+  ];
+  return details[index] || `Ejecutar ${phase.toLowerCase()} con foco en valor real.`;
+}
+
+function selectedProject() { return state.ideas.find((idea) => idea.id === state.selectedId) || state.ideas[0] || null; }
+function completedCount(project = selectedProject()) { return project ? Object.values(project.completed || {}).filter(Boolean).length : 0; }
+function totalTasks() { return state.ideas.reduce((sum, idea) => sum + idea.plan.tasks.length, 0); }
+function publicCount() { return state.ideas.filter((idea) => idea.public).length; }
+function allToolNames() { return Array.from(new Set([...state.tools.map((tool) => tool.name), ...state.ideas.flatMap((idea) => idea.plan.tools)])); }
 
 function setMessage(message = '', isError = false) {
   const element = byId('ideaMessage');
@@ -139,73 +159,100 @@ function setMessage(message = '', isError = false) {
   element.classList.toggle('error', isError);
 }
 
+function renderSavedStatus() {
+  const pill = byId('saveStatus');
+  const label = byId('lastSaved');
+  if (!state.lastUpdated) {
+    pill.textContent = 'Local';
+    label.textContent = 'Sin guardar todavía';
+    return;
+  }
+  const date = new Date(state.lastUpdated).toLocaleString('es', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  pill.textContent = 'Guardado';
+  label.textContent = `Guardado localmente: ${date}`;
+}
+
 function renderStats() {
   byId('ideasCount').textContent = state.ideas.length;
-  byId('tasksCount').textContent = state.tasks.length;
-  byId('toolsCount').textContent = state.tools.length;
+  byId('tasksCount').textContent = totalTasks();
+  byId('toolsCount').textContent = allToolNames().length;
   byId('completedCount').textContent = completedCount();
 }
 
-function renderSaveStatus() {
-  const label = byId('lastSaved');
-  const pill = byId('saveStatus');
-  if (!state.lastUpdated) {
-    label.textContent = 'Sin guardar todavía';
-    pill.textContent = 'Local';
+function renderIdeas() {
+  const list = byId('ideaHistory');
+  if (!state.ideas.length) {
+    list.innerHTML = '<div class="empty-state">Tus ideas aparecerán aquí como tarjetas. Podrás seleccionarlas, hacerlas públicas o privadas y compartir un resumen limpio.</div>';
     return;
   }
-  const formatted = new Date(state.lastUpdated).toLocaleString('es', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-  label.textContent = `Guardado localmente: ${formatted}`;
-  pill.textContent = 'Guardado';
-}
-
-function renderPlan() {
-  const output = byId('planOutput');
-  if (!state.plan) {
-    output.className = 'empty-state';
-    output.textContent = 'Captura una idea para generar resumen, objetivo, MVP, 5 tareas, herramientas, riesgos, próxima acción y roadmap de 7 días.';
-    return;
-  }
-
-  output.className = 'plan-stack';
-  output.innerHTML = `
-    <article class="info-card"><p class="eyebrow">Resumen</p><p>${escapeHtml(state.plan.summary)}</p></article>
-    <article class="info-card"><p class="eyebrow">Objetivo principal</p><h3>${escapeHtml(state.plan.objective)}</h3></article>
-    <article class="info-card"><p class="eyebrow">Usuario objetivo</p><p>${escapeHtml(state.plan.targetUser)}</p></article>
-    <article class="info-card"><p class="eyebrow">MVP sugerido</p><p>${escapeHtml(state.plan.mvp)}</p></article>
-    <article class="info-card"><p class="eyebrow">5 tareas concretas</p><div class="task-list">${state.plan.tasks.map((task, index) => `
-      <label class="task-item"><input type="checkbox" data-task-index="${index}" ${state.completedTasks[index] ? 'checked' : ''} /><span>${escapeHtml(task)}</span></label>
-    `).join('')}</div></article>
-    <article class="info-card"><p class="eyebrow">Herramientas recomendadas</p><div class="tool-tags">${state.plan.tools.map((tool) => `<span>${escapeHtml(tool)}</span>`).join('')}</div></article>
-    <article class="info-card"><p class="eyebrow">Riesgos o bloqueos</p><ul>${state.plan.risks.map((risk) => `<li>${escapeHtml(risk)}</li>`).join('')}</ul></article>
-    <article class="info-card accent-card"><p class="eyebrow">Próxima acción</p><p>${escapeHtml(state.plan.nextAction)}</p></article>
-    <article class="info-card"><p class="eyebrow">Roadmap de 7 días</p><ol>${state.plan.roadmap.map((step) => `<li><strong>Día ${step.day}:</strong> ${escapeHtml(step.item)}</li>`).join('')}</ol></article>
-  `;
-
-  output.querySelectorAll('[data-task-index]').forEach((checkbox) => checkbox.addEventListener('change', handleTaskToggle));
-}
-
-function renderBuilder() {
-  byId('builderBlocks').innerHTML = builderBlocks.map((block) => `
-    <article class="info-card"><h3>${escapeHtml(block.title)}</h3><p>${escapeHtml(block.text)}</p></article>
-  `).join('');
-}
-
-function renderTools() {
-  byId('toolList').innerHTML = state.tools.map((tool) => `
-    <article class="tool-card">
-      <div><h3>${escapeHtml(tool.name)}</h3><p>${escapeHtml(tool.description || 'Herramienta guardada por el usuario.')}</p></div>
-      <span class="price-pill">${escapeHtml(tool.price || 'Gratis')}</span>
+  list.innerHTML = state.ideas.map((idea) => `
+    <article class="idea-card ${idea.id === state.selectedId ? 'selected' : ''}" data-idea-card="${idea.id}">
+      <button type="button" class="idea-main" data-select-idea="${idea.id}">
+        <span class="idea-title">${escapeHtml(idea.plan.projectName)}</span>
+        <span class="idea-summary">${escapeHtml(short(idea.plan.summary, 96))}</span>
+      </button>
+      <div class="idea-actions">
+        <button type="button" class="mini-button" data-toggle-public="${idea.id}">${idea.public ? 'Público' : 'Privado'}</button>
+        <button type="button" class="mini-button" data-share-idea="${idea.id}">Compartir</button>
+      </div>
     </article>
   `).join('');
 }
 
+function renderPlan() {
+  const project = selectedProject();
+  const output = byId('planOutput');
+  if (!project) {
+    output.className = 'empty-state';
+    output.textContent = 'Captura una idea para que NEXO Engine genere nombre, problema, usuario, propuesta, MVP, fases, tareas y próximas acciones.';
+    return;
+  }
+  const plan = project.plan;
+  output.className = 'plan-stack';
+  output.innerHTML = `
+    <article class="info-card hero-plan"><p class="eyebrow">Proyecto seleccionado</p><h3>${escapeHtml(plan.projectName)}</h3><p>${escapeHtml(plan.summary)}</p><span class="visibility-pill">${project.public ? 'Público' : 'Privado'}</span></article>
+    <article class="info-card"><p class="eyebrow">Problema</p><p>${escapeHtml(plan.problem)}</p></article>
+    <article class="info-card"><p class="eyebrow">Usuario objetivo</p><p>${escapeHtml(plan.targetUser)}</p></article>
+    <article class="info-card accent-card"><p class="eyebrow">Propuesta de valor</p><p>${escapeHtml(plan.valueProposition)}</p></article>
+    <article class="info-card"><p class="eyebrow">Alcance MVP</p><ul>${plan.mvpScope.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></article>
+    <article class="info-card"><p class="eyebrow">Fases</p><div class="phase-grid">${plan.phases.map((phase) => `<div><strong>${escapeHtml(phase.name)}</strong><span>${escapeHtml(phase.detail)}</span></div>`).join('')}</div></article>
+    <article class="info-card"><p class="eyebrow">Tareas checkables</p><div class="task-list">${plan.tasks.map((task, index) => `<label class="task-item"><input type="checkbox" data-task-index="${index}" ${project.completed?.[index] ? 'checked' : ''} /><span>${escapeHtml(task)}</span></label>`).join('')}</div></article>
+    <article class="info-card"><p class="eyebrow">Herramientas recomendadas</p><div class="tool-tags">${plan.tools.map((tool) => `<span>${escapeHtml(tool)}</span>`).join('')}</div></article>
+    <article class="info-card"><p class="eyebrow">Riesgos</p><ul>${plan.risks.map((risk) => `<li>${escapeHtml(risk)}</li>`).join('')}</ul></article>
+    <article class="info-card"><p class="eyebrow">Próximas 3 acciones</p><ol>${plan.nextActions.map((action) => `<li>${escapeHtml(action)}</li>`).join('')}</ol></article>
+  `;
+  output.querySelectorAll('[data-task-index]').forEach((input) => input.addEventListener('change', handleTaskToggle));
+}
+
+function renderTools() {
+  byId('toolList').innerHTML = state.tools.map((tool) => `
+    <article class="tool-card"><div><h3>${escapeHtml(tool.name)}</h3><p>${escapeHtml(tool.description || 'Herramienta guardada localmente.')}</p></div><span class="price-pill">${escapeHtml(tool.price || 'Gratis')}</span></article>
+  `).join('');
+}
+
+function renderChat() {
+  const project = selectedProject();
+  const panel = byId('chatHistory');
+  if (!project) {
+    panel.innerHTML = '<div class="empty-state">Genera o selecciona un proyecto para conversar con NEXO Engine.</div>';
+    return;
+  }
+  const messages = state.chat[project.id] || [];
+  if (!messages.length) {
+    panel.innerHTML = '<div class="empty-state">Pregunta algo como: “¿Qué hago primero?” o “¿Cuál es el mayor riesgo?”.</div>';
+    return;
+  }
+  panel.innerHTML = messages.map((message) => `<div class="chat-bubble ${message.role}"><span>${message.role === 'user' ? 'Tú' : 'NEXO'}</span><p>${escapeHtml(message.text)}</p></div>`).join('');
+  panel.scrollTop = panel.scrollHeight;
+}
+
 function syncUi() {
   renderStats();
-  renderSaveStatus();
+  renderSavedStatus();
+  renderIdeas();
   renderPlan();
-  renderBuilder();
   renderTools();
+  renderChat();
   updateActiveNav();
 }
 
@@ -217,65 +264,84 @@ function scrollToSection(id) {
   updateActiveNav();
 }
 
-function captureAndPlan() {
-  const idea = normalizeIdea(byId('ideaInput').value);
+function createProject() {
+  const idea = clean(byId('ideaInput').value);
   if (!idea) {
-    setMessage('Escribe una idea primero. Ejemplo: “Quiero vender plantillas digitales desde mi teléfono”.', true);
+    setMessage('Escribe una idea primero. Ejemplo: “Quiero crear un negocio desde mi teléfono”.', true);
     scrollToSection('idea');
     byId('ideaInput').focus();
     return;
   }
-
-  const plan = makePlan(idea);
-  state.lastIdea = idea;
-  state.ideas = [idea, ...state.ideas.filter((savedIdea) => savedIdea !== idea)].slice(0, 10);
-  state.plan = plan;
-  state.tasks = plan.tasks;
-  state.completedTasks = {};
-  plan.tools.forEach((tool) => {
-    if (!state.tools.some((savedTool) => savedTool.name.toLowerCase() === tool.toLowerCase())) {
-      state.tools.push({ name: tool, price: 'Gratis', description: 'Recomendada por el plan actual.' });
-    }
-  });
+  const existing = state.ideas.find((item) => item.originalIdea.toLowerCase() === idea.toLowerCase());
+  if (existing) {
+    state.selectedId = existing.id;
+    setMessage('Idea existente seleccionada. Puedes seguir trabajando desde el plan.');
+  } else {
+    const project = { id: uid(), originalIdea: idea, public: false, completed: {}, plan: buildEnginePlan(idea) };
+    state.ideas = [project, ...state.ideas].slice(0, 20);
+    state.selectedId = project.id;
+    setMessage('Proyecto creado y guardado localmente.');
+  }
   saveState();
-  setMessage('Plan generado y guardado localmente.');
   syncUi();
   scrollToSection('plan');
 }
 
+function selectIdea(id) {
+  state.selectedId = id;
+  const project = selectedProject();
+  byId('ideaInput').value = project?.originalIdea || '';
+  saveState();
+  syncUi();
+  scrollToSection('plan');
+}
+
+function togglePublic(id) {
+  const project = state.ideas.find((idea) => idea.id === id);
+  if (!project) return;
+  project.public = !project.public;
+  saveState();
+  syncUi();
+}
+
 function handleTaskToggle(event) {
-  state.completedTasks[event.target.dataset.taskIndex] = event.target.checked;
+  const project = selectedProject();
+  if (!project) return;
+  project.completed = { ...(project.completed || {}), [event.target.dataset.taskIndex]: event.target.checked };
   saveState();
   renderStats();
 }
 
-function planAsText() {
-  if (!state.plan) return '';
+function summaryText(project = selectedProject()) {
+  if (!project) return '';
+  const plan = project.plan;
   return [
-    'NEXO v0.3 — Plan local', '',
-    `Idea: ${state.lastIdea}`,
-    `Resumen: ${state.plan.summary}`,
-    `Objetivo: ${state.plan.objective}`,
-    `Usuario objetivo: ${state.plan.targetUser}`,
-    `MVP sugerido: ${state.plan.mvp}`, '',
-    '5 tareas concretas:',
-    ...state.plan.tasks.map((task, index) => `${index + 1}. ${state.completedTasks[index] ? '[x]' : '[ ]'} ${task}`), '',
-    'Herramientas recomendadas:',
-    ...state.plan.tools.map((tool) => `- ${tool}`), '',
-    'Riesgos o bloqueos:',
-    ...state.plan.risks.map((risk) => `- ${risk}`), '',
-    `Próxima acción: ${state.plan.nextAction}`, '',
-    'Roadmap de 7 días:',
-    ...state.plan.roadmap.map((step) => `Día ${step.day}: ${step.item}`)
+    `NEXO Engine v1 — ${plan.projectName}`,
+    `Estado: ${project.public ? 'Público' : 'Privado'}`,
+    '',
+    `Idea: ${project.originalIdea}`,
+    `Problema: ${plan.problem}`,
+    `Usuario: ${plan.targetUser}`,
+    `Propuesta de valor: ${plan.valueProposition}`,
+    '',
+    'MVP:',
+    ...plan.mvpScope.map((item) => `- ${item}`),
+    '',
+    'Fases:',
+    ...plan.phases.map((phase) => `- ${phase.name}: ${phase.detail}`),
+    '',
+    'Tareas:',
+    ...plan.tasks.map((task, index) => `${index + 1}. ${project.completed?.[index] ? '[x]' : '[ ]'} ${task}`),
+    '',
+    'Próximas 3 acciones:',
+    ...plan.nextActions.map((action) => `- ${action}`)
   ].join('\n');
 }
 
-async function copyPlan() {
-  const text = planAsText();
-  if (!text) { setMessage('Genera un plan antes de copiarlo.', true); return; }
+async function copyText(text, successMessage) {
   try {
     await navigator.clipboard.writeText(text);
-    setMessage('Plan copiado al portapapeles.');
+    setMessage(successMessage);
   } catch {
     const area = byId('ideaInput');
     area.value = text;
@@ -284,34 +350,47 @@ async function copyPlan() {
   }
 }
 
+function shareProject(id) {
+  const project = state.ideas.find((idea) => idea.id === id) || selectedProject();
+  if (!project) { setMessage('Crea un proyecto antes de compartir.', true); return; }
+  copyText(summaryText(project), 'Resumen limpio copiado para compartir.');
+}
+
+function copyPlan() {
+  const text = summaryText();
+  if (!text) { setMessage('Crea un proyecto antes de copiar.', true); return; }
+  copyText(text, 'Plan copiado al portapapeles.');
+}
+
 function downloadPlan() {
-  const text = planAsText();
-  if (!text) { setMessage('Genera un plan antes de descargarlo.', true); return; }
+  const text = summaryText();
+  if (!text) { setMessage('Crea un proyecto antes de descargar.', true); return; }
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'nexo-v03-plan.txt';
+  link.download = 'nexo-engine-v1-project.txt';
   document.body.appendChild(link);
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-  setMessage('Plan descargado como .txt.');
+  setMessage('Proyecto descargado como .txt.');
 }
 
 function resetProject() {
   state = initialState();
   localStorage.removeItem(storageKey);
   byId('ideaInput').value = '';
-  setMessage('Proyecto reiniciado.');
+  byId('chatInput').value = '';
+  setMessage('NEXO reiniciado. Puedes crear un proyecto nuevo.');
   syncUi();
   scrollToSection('inicio');
 }
 
 function addTool(event) {
   event.preventDefault();
-  const name = normalizeIdea(byId('toolName').value);
-  const price = normalizeIdea(byId('toolPrice').value) || 'Gratis';
+  const name = clean(byId('toolName').value);
+  const price = clean(byId('toolPrice').value) || 'Gratis';
   if (!name) { setMessage('Escribe el nombre de la herramienta antes de añadirla.', true); scrollToSection('tools'); return; }
   state.tools = [{ name, price, description: 'Herramienta personalizada guardada localmente.' }, ...state.tools];
   byId('toolName').value = '';
@@ -322,33 +401,69 @@ function addTool(event) {
   scrollToSection('tools');
 }
 
+function engineAnswer(question, project) {
+  const q = question.toLowerCase();
+  const plan = project.plan;
+  if (q.includes('primero') || q.includes('empezar') || q.includes('siguiente')) return `Empieza por esto: ${plan.nextActions[0]} Después completa la primera tarea del checklist y pide feedback rápido.`;
+  if (q.includes('riesgo') || q.includes('bloqueo')) return `El mayor riesgo es: ${plan.risks[0]}. Para reducirlo, valida con una persona real antes de ampliar el MVP.`;
+  if (q.includes('mvp') || q.includes('alcance')) return `Tu MVP debe mantenerse pequeño: ${plan.mvpScope.join(' + ')}. No agregues funciones hasta confirmar interés.`;
+  if (q.includes('usuario') || q.includes('cliente')) return `El usuario inicial es: ${plan.targetUser}. Escribe un mensaje directo para preguntarle si este problema le duele hoy.`;
+  if (q.includes('compartir') || q.includes('venta') || q.includes('vender')) return `Comparte esta propuesta: ${plan.valueProposition}. Usa el botón Compartir para copiar un resumen limpio.`;
+  return `Para “${question}”, NEXO recomienda mirar el plan de ${plan.projectName}: problema claro, MVP pequeño y una acción hoy: ${plan.nextActions[0]}`;
+}
+
+function sendChat(event) {
+  event.preventDefault();
+  const project = selectedProject();
+  const input = byId('chatInput');
+  const question = clean(input.value);
+  if (!project) { setMessage('Crea o selecciona un proyecto antes de usar el chat.', true); scrollToSection('idea'); return; }
+  if (!question) return;
+  const messages = state.chat[project.id] || [];
+  messages.push({ role: 'user', text: question, at: new Date().toISOString() });
+  messages.push({ role: 'engine', text: engineAnswer(question, project), at: new Date().toISOString() });
+  state.chat[project.id] = messages.slice(-30);
+  input.value = '';
+  saveState();
+  renderChat();
+  renderSavedStatus();
+}
+
 function updateActiveNav() {
-  const sections = ['inicio', 'idea', 'plan', 'builder', 'tools'];
+  const sections = ['inicio', 'idea', 'history', 'plan', 'chat', 'builder', 'tools'];
   const current = sections.reduce((active, id) => {
     const section = byId(id);
-    if (section && section.getBoundingClientRect().top <= 120) return id;
+    if (section && section.getBoundingClientRect().top <= 130) return id;
     return active;
   }, 'inicio');
-  document.querySelectorAll('[data-scroll-target]').forEach((button) => button.classList.toggle('active', button.dataset.scrollTarget === current));
+  document.querySelectorAll('[data-scroll-target]').forEach((control) => control.classList.toggle('active', control.dataset.scrollTarget === current));
 }
 
 function bindEvents() {
   byId('heroCapture').addEventListener('click', () => scrollToSection('idea'));
   byId('heroPlan').addEventListener('click', () => scrollToSection('plan'));
-  byId('captureIdea').addEventListener('click', captureAndPlan);
-  byId('generatePlan').addEventListener('click', captureAndPlan);
+  byId('captureIdea').addEventListener('click', createProject);
+  byId('generatePlan').addEventListener('click', createProject);
   byId('copyPlan').addEventListener('click', copyPlan);
   byId('downloadPlan').addEventListener('click', downloadPlan);
   byId('resetProject').addEventListener('click', resetProject);
   byId('toolForm').addEventListener('submit', addTool);
-  document.querySelectorAll('[data-scroll-target]').forEach((control) => control.addEventListener('click', (event) => {
-    event.preventDefault();
-    scrollToSection(control.dataset.scrollTarget);
-  }));
+  byId('chatForm').addEventListener('submit', sendChat);
+  document.addEventListener('click', (event) => {
+    const select = event.target.closest('[data-select-idea]');
+    const toggle = event.target.closest('[data-toggle-public]');
+    const share = event.target.closest('[data-share-idea]');
+    const scroll = event.target.closest('[data-scroll-target]');
+    if (select) selectIdea(select.dataset.selectIdea);
+    if (toggle) togglePublic(toggle.dataset.togglePublic);
+    if (share) shareProject(share.dataset.shareIdea);
+    if (scroll) { event.preventDefault(); scrollToSection(scroll.dataset.scrollTarget); }
+  });
   window.addEventListener('scroll', updateActiveNav, { passive: true });
   window.addEventListener('hashchange', updateActiveNav);
 }
 
-byId('ideaInput').value = state.lastIdea || '';
+const project = selectedProject();
+byId('ideaInput').value = project?.originalIdea || '';
 bindEvents();
 syncUi();

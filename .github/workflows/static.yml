@@ -1,4 +1,4 @@
-name: Deploy NEXO v0.3 Static Site
+name: Deploy NEXO Engine v1 Static Site
 
 on:
   push:
