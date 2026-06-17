@@ -3,137 +3,77 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)" />
-    <meta name="description" content="NEXO Engine v1: sistema estático mobile-first para convertir ideas en proyectos, guardar historial, conversar localmente y compartir resúmenes." />
-    <title>NEXO Engine v1 — ATELIER</title>
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="description" content="ATELIER/NEXO: sitio estático mobile-first para convertir una idea en un plan simple guardado localmente." />
+    <title>ATELIER / NEXO — Planificador móvil</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="ambient ambient-one" aria-hidden="true"></div>
-    <div class="ambient ambient-two" aria-hidden="true"></div>
-
-    <div class="app-shell">
-      <header class="hero section" id="inicio">
-        <nav class="topbar" aria-label="Navegación principal">
-          <a class="brand" href="#inicio" data-scroll-target="inicio" aria-label="Ir al inicio de NEXO">
-            <span class="brand-mark">N</span>
-            <span>NEXO <small>Engine v1</small></span>
+    <div class="page-shell">
+      <header class="hero panel" id="inicio">
+        <nav class="topbar" aria-label="Navegación superior">
+          <a class="brand" href="#inicio" data-target="inicio" aria-label="Ir al inicio">
+            <span class="brand-icon">N</span>
+            <span>ATELIER <small>NEXO</small></span>
           </a>
-          <span class="status-pill" id="saveStatus">Local</span>
+          <span class="status" id="saveStatus">Local</span>
         </nav>
 
-        <section class="hero-card glass-card">
-          <p class="eyebrow">Creation Operating System</p>
-          <h1>Convierte una idea en un proyecto vivo desde tu teléfono.</h1>
-          <p class="hero-copy">NEXO Engine es un constructor local: desarrolla tu idea, crea tareas, guarda historial, responde preguntas del proyecto y genera un resumen listo para compartir.</p>
-          <div class="hero-actions">
-            <button class="button primary" id="heroCapture" type="button">Capturar idea</button>
-            <button class="button secondary" id="heroPlan" type="button">Ver plan</button>
-          </div>
-        </section>
-
-        <section class="stats-grid" aria-label="Resumen local del proyecto">
-          <article class="glass-card"><strong id="ideasCount">0</strong><span>Ideas</span></article>
-          <article class="glass-card"><strong id="tasksCount">0</strong><span>Tareas</span></article>
-          <article class="glass-card"><strong id="toolsCount">0</strong><span>Tools</span></article>
-          <article class="glass-card"><strong id="completedCount">0</strong><span>Hechas</span></article>
-        </section>
-        <p class="save-indicator" id="lastSaved">Sin guardar todavía</p>
+        <p class="eyebrow">Mobile-first creator</p>
+        <h1>Convierte una idea en un plan simple desde tu teléfono.</h1>
+        <p class="hero-text">NEXO funciona en el navegador, sin backend ni APIs: captura tu idea, genera un plan mínimo, guarda el progreso y compártelo.</p>
+        <div class="actions">
+          <button class="button primary" id="heroCapture" type="button">Capturar idea</button>
+          <button class="button secondary" id="heroPlan" type="button">Ver plan</button>
+        </div>
+        <p class="saved-text" id="lastSaved">Sin guardar todavía</p>
       </header>
 
       <main>
-        <section class="panel glass-card section" id="idea">
-          <div class="section-heading">
-            <p class="eyebrow">Idea Capture</p>
-            <h2>¿Qué quieres construir?</h2>
-            <p>Escribe una idea simple. NEXO la expandirá en proyecto, problema, usuario, valor, MVP, fases, tareas y próximas acciones.</p>
+        <section class="panel section" id="idea">
+          <div class="section-title">
+            <p class="eyebrow">Idea</p>
+            <h2>¿Qué quieres crear?</h2>
+            <p>Escribe una frase. NEXO generará un plan local con título, objetivo, categoría, próxima acción y 5 tareas simples.</p>
           </div>
-          <label for="ideaInput">Idea inicial</label>
+          <label for="ideaInput">Tu idea</label>
           <textarea id="ideaInput" rows="6" placeholder="Ejemplo: Quiero vender plantillas digitales desde mi teléfono"></textarea>
-          <p class="form-message" id="ideaMessage" aria-live="polite"></p>
+          <p class="message" id="message" aria-live="polite"></p>
           <div class="button-grid">
             <button class="button primary" id="captureIdea" type="button">Capturar idea</button>
             <button class="button secondary" id="generatePlan" type="button">Generar plan</button>
-            <button class="button ghost" id="copyPlan" type="button">Copiar plan</button>
-            <button class="button ghost" id="downloadPlan" type="button">Descargar .txt</button>
-            <button class="button danger" id="resetProject" type="button">Reiniciar</button>
           </div>
         </section>
 
-        <section class="panel glass-card section" id="history">
-          <div class="section-heading">
-            <p class="eyebrow">Idea History</p>
-            <h2>Ideas guardadas</h2>
-            <p>Selecciona un proyecto, cambia su visibilidad o copia un resumen limpio para compartir.</p>
+        <section class="panel section" id="plan">
+          <div class="section-title">
+            <p class="eyebrow">Plan</p>
+            <h2>Plan generado</h2>
+            <p>El resultado queda guardado automáticamente en este dispositivo.</p>
           </div>
-          <div class="idea-history" id="ideaHistory"></div>
-        </section>
-
-        <section class="panel glass-card section" id="plan">
-          <div class="section-heading">
-            <p class="eyebrow">Project Engine</p>
-            <h2>Plan desarrollado</h2>
-            <p>Un proyecto usable con fases, tareas checkables, herramientas y acciones inmediatas.</p>
-          </div>
-          <div id="planOutput" class="empty-state">Captura una idea para generar el plan desarrollado.</div>
-        </section>
-
-        <section class="panel glass-card section" id="chat">
-          <div class="section-heading">
-            <p class="eyebrow">Project Chat</p>
-            <h2>Pregunta al proyecto</h2>
-            <p>Chat local sin APIs. NEXO responde usando el plan seleccionado.</p>
-          </div>
-          <div class="chat-history" id="chatHistory"></div>
-          <form class="chat-form" id="chatForm">
-            <label for="chatInput">Pregunta</label>
-            <div class="chat-row">
-              <input id="chatInput" type="text" autocomplete="off" placeholder="¿Qué hago primero?" />
-              <button class="button primary compact" type="submit">Enviar</button>
-            </div>
-          </form>
-        </section>
-
-        <section class="panel glass-card section" id="builder">
-          <div class="section-heading">
-            <p class="eyebrow">Builder</p>
-            <h2>Flujo NEXO</h2>
-            <p>IDEA → ENTENDER → PLANIFICAR → CONSTRUIR → EJECUTAR → MEJORAR.</p>
-          </div>
-          <div class="builder-grid">
-            <article class="info-card"><h3>Entender</h3><p>Convierte una frase desordenada en problema, usuario y valor.</p></article>
-            <article class="info-card"><h3>Planificar</h3><p>Reduce el alcance a un MVP que puedas ejecutar desde móvil.</p></article>
-            <article class="info-card"><h3>Ejecutar</h3><p>Usa tareas, herramientas, chat y feedback para avanzar cada día.</p></article>
+          <div class="empty" id="planResult">Todavía no hay plan. Captura una idea para empezar.</div>
+          <div class="button-grid compact-grid">
+            <button class="button secondary" id="copyPlan" type="button">Copiar plan</button>
+            <button class="button danger" id="resetApp" type="button">Reiniciar</button>
           </div>
         </section>
 
-        <section class="panel glass-card section" id="tools">
-          <div class="section-heading">
+        <section class="panel section" id="tools">
+          <div class="section-title">
             <p class="eyebrow">Tools</p>
-            <h2>Herramientas guardadas</h2>
-            <p>Agrega recursos, servicios o herramientas propias para usar en tus proyectos.</p>
+            <h2>Herramientas simples</h2>
+            <p>Recomendaciones mínimas para ejecutar el plan desde móvil.</p>
           </div>
-          <form class="tool-form" id="toolForm">
-            <label for="toolName">Nueva herramienta</label>
-            <div class="tool-input-row">
-              <input id="toolName" type="text" autocomplete="off" placeholder="Ejemplo: Plantilla de landing" />
-              <input id="toolPrice" type="text" autocomplete="off" inputmode="decimal" placeholder="Gratis o $9" />
-              <button class="button primary compact" type="submit">Añadir</button>
-            </div>
-          </form>
           <div class="tool-list" id="toolList"></div>
         </section>
       </main>
     </div>
 
-    <nav class="bottom-nav" aria-label="Navegación móvil">
-      <button type="button" data-scroll-target="inicio">Inicio</button>
-      <button type="button" data-scroll-target="idea">Idea</button>
-      <button type="button" data-scroll-target="history">Ideas</button>
-      <button type="button" data-scroll-target="plan">Plan</button>
-      <button type="button" data-scroll-target="chat">Chat</button>
-      <button type="button" data-scroll-target="tools">Tools</button>
+    <nav class="bottom-nav" aria-label="Navegación inferior">
+      <button type="button" data-target="inicio">Inicio</button>
+      <button type="button" data-target="idea">Idea</button>
+      <button type="button" data-target="plan">Plan</button>
+      <button type="button" data-target="tools">Tools</button>
     </nav>
 
     <script src="app.js" defer></script>
